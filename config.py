@@ -29,6 +29,9 @@ class Config:
         print('SECRET KEY ENV VAR NOT SET! SHOULD NOT SEE IN PRODUCTION')
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 
+    # Database
+    DATABASE_URI = os.environ.get('DATABASE_URI', 'mysql+pymysql://root:12345678@localhost/sdbayesdev?charset=utf8mb4')
+
     # Email
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.sendgrid.net')
     MAIL_PORT = os.environ.get('MAIL_PORT', 587)
@@ -45,7 +48,7 @@ class Config:
     # Admin account
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'password')
     ADMIN_EMAIL = os.environ.get(
-        'ADMIN_EMAIL', 'flask-base-admin@example.com')
+        'ADMIN_EMAIL', 'admin@admin.com')
     EMAIL_SUBJECT_PREFIX = '[{}]'.format(APP_NAME)
     EMAIL_SENDER = '{app_name} Admin <{email}>'.format(
         app_name=APP_NAME, email=MAIL_USERNAME)
@@ -75,8 +78,11 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     ASSETS_DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL',
-        'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite'))
+    # SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL',
+    #     'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite'))
+    SQLALCHEMY_DATABASE_URI = \
+        'mysql+pymysql://root:12345678@localhost/sdbayesdev?charset=utf8mb4'
+
 
     @classmethod
     def init_app(cls, app):
