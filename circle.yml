@@ -20,6 +20,7 @@ jobs:
             sudo pip install -U flask_script
             sudo pip install -U redis
             sudo pip install -U rq
+            sudo pip install -U flask_assets
 
       - run :
           name: Testing
