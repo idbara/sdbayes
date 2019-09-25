@@ -1,13 +1,30 @@
-machine:
-  python:
-    version: 3.4.2
-dependencies:
-  pre:
-    - pip install -U flake8
-    - pip install -U isort
-    - pip install -U yapf
+version: 2
+jobs:
+  build:
+    working_directory: ~/python-ci
 
-test:
-  override:
-    - find . -not -path '*/.eggs/*' -not -path './venv/*' -name '*.py' | xargs flake8 
-    - python manage.py test
+    docker:
+      # specify the version you desire here
+      - image: circleci/python:3.6.9
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - dependencies-node-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - dependencies-node
+
+      - run:
+          name: Install python test dependencies
+          command: |
+            sudo pip install -U flake8
+            sudo pip install -U isort
+            sudo pip install -U yapf
+      - run :
+        name: test
+        command: |
+          find . -not -path '*/.eggs/*' -not -path './venv/*' -name '*.py' | xargs flake8 
+          python manage.py test
