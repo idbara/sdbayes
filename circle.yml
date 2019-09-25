@@ -18,7 +18,7 @@ jobs:
             sudo pip install -U yapf
             sudo pip install -U flask_migrate
             sudo pip install -U flask_script
-            sudo pip install -u redis
+            sudo pip install -U redis
 
       - run :
           name: Testing
