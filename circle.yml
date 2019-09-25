@@ -16,7 +16,6 @@ jobs:
             sudo pip install -U flake8
             sudo pip install -U isort
             sudo pip install -U yapf
-            sudo pip install -U -r requirement.txt
 
       - run :
           name: Testing
