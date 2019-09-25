@@ -13,9 +13,11 @@ jobs:
       - run:
           name: Install python test dependencies
           command: |
-            sudo pip install -U flake8
-            sudo pip install -U isort
-            sudo pip install -U yapf
+            pip install -U flake8
+            pip install -U isort
+            pip install -U yapf
+            pip install -r requirement.txt
+
       - run :
           name: Testing
           command: |
