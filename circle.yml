@@ -24,7 +24,7 @@ jobs:
             sudo pip install -U isort
             sudo pip install -U yapf
       - run :
-        name: test
-        command: |
-          find . -not -path '*/.eggs/*' -not -path './venv/*' -name '*.py' | xargs flake8 
-          python manage.py test
+          name: Testing
+          command: |
+            find . -not -path '*/.eggs/*' -not -path './venv/*' -name '*.py' | xargs flake8 
+            python manage.py test
