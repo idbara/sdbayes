@@ -1,5 +1,5 @@
 {
-  "name": "flask-base",
+  "name": "SD BAYES",
   "description": "",
   "scripts": {
     "postdeploy": "python manage.py recreate_db && python manage.py setup_prod && python manage.py add_fake_data"
@@ -9,7 +9,7 @@
       "value": "production"
     },
     "SECRET_KEY": {
-      "generator": "secret"
+      "generator": "sssst!!! I'm secret"
     },
     "MAIL_USERNAME": {
       "required": true
