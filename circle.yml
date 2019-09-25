@@ -13,13 +13,13 @@ jobs:
       - run:
           name: Install python test dependencies
           command: |
-            pip install -U flake8
-            pip install -U isort
-            pip install -U yapf
-            pip install -U -r requirement.txt
+            sudo pip install -U flake8
+            sudo pip install -U isort
+            sudo pip install -U yapf
+            sudo pip install -U -r requirement.txt
 
       - run :
           name: Testing
           command: |
-            find . -not -path '*/.eggs/*' -not -path './venv/*' -name '*.py' | xargs flake8 
-            python manage.py test
+            sudo find . -not -path '*/.eggs/*' -not -path './venv/*' -name '*.py' | xargs flake8 
+            sudo python manage.py test
