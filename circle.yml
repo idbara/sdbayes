@@ -16,14 +16,4 @@ jobs:
             sudo pip install -U flake8
             sudo pip install -U isort
             sudo pip install -U yapf
-            sudo pip install -U flask_migrate
-            sudo pip install -U flask_script
-            sudo pip install -U redis
-            sudo pip install -U rq
-            sudo pip install -U flask_assets
-            sudo pip install -U flask_compress
 
-      - run :
-          name: Testing
-          command: |
-            sudo python manage.py test
