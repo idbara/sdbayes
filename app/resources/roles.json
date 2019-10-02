@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Pasien",
+    "index": "pasien",
+    "default": 0,
+    "permissions": null
+  },
+  {
+    "id": 2,
+    "name": "Psikolog",
+    "index": "psikolog",
+    "default": 0,
+    "permissions": null
+  },
+  {
+    "id": 3,
+    "name": "Administrator",
+    "index": "admin",
+    "default": 0,
+    "permissions": null
+  }
+]

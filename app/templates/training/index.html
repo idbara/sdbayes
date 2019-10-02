@@ -1,0 +1,48 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+    <div class="ui stackable centered grid container">
+        <div class="twelve wide column">
+            <h2 class="ui header">
+                Data Training
+            </h2>
+            <div class="ui two column stackable grid">
+                <table id="example" class="ui celled table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Merasa gelisah, cemas atau amat tegang</th>
+                            <th>Tidak mampu menghentikan atau mengendalikan rasa khawatir</th>
+                            <th>Terlalu mengkhawatirkan berbagai hal</th>
+                            <th>Sulit untuk santai</th>
+                            <th>Sangat gelisah sehingga sulit untuk duduk diam</th>
+                            <th>Menjadi mudah jengkel atau lekas marah</th>
+                            <th>Merasa takut seolah-olah sesuatu yang mengerikan/buruk mungkin terjadi</th>
+                            <th>Tingkat kecemasan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Catur</td>
+                            <td>Sering</td>	
+                            <td>Tidak pernah</td>
+                            <td>Sesekali</td>
+                            <td>Sesekali</td>
+                            <td>Tidak pernah</td>
+                            <td>Sesekali</td>
+                            <td>Sesekali</td>
+                            <td>Ringan</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    } );
+    </script>
+{% endblock %}

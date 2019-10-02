@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "confirmed": 1,
+    "first_name": "Admin",
+    "last_name": "Account",
+    "email": "admin@admin.com",
+    "password_hash": "pbkdf2:sha256:150000$wkkurhx1$4ed1ea89e654b011feab6a398bdff8967d51366ae8fe21c23643c35dd672deb5",
+    "role_id": 3
+  }
+]
