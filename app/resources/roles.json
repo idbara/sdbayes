@@ -18,6 +18,6 @@
     "name": "Administrator",
     "index": "admin",
     "default": 0,
-    "permissions": null
+    "permissions": 255
   }
 ]

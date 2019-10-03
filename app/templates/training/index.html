@@ -1,10 +1,28 @@
 {% extends 'layouts/base.html' %}
 
+{% macro pilih(pilihan_id) %}
+    {% for p in pilihans %}
+        {%if  pilihan_id == p.id%}
+            <td>{{ p.item }}</td>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+{% macro label(label_id) %}
+    {% for l in labels %}
+        {%if  label_id == l.id%}
+            <td>{{ l.item }}</td>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
 {% block content %}
     <div class="ui stackable centered grid container">
         <div class="twelve wide column">
             <h2 class="ui header">
-                Data Training
+                Data Training 
+                <button class="ui basic button">
+                    <i class="icon plus"></i>
+                    Add
+                </button>
             </h2>
             <div class="ui two column stackable grid">
                 <table id="example" class="ui celled table" style="width:100%">
@@ -23,18 +41,20 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for t in trainings %}
                         <tr>
-                            <td>Catur</td>
-                            <td>Sering</td>	
-                            <td>Tidak pernah</td>
-                            <td>Sesekali</td>
-                            <td>Sesekali</td>
-                            <td>Tidak pernah</td>
-                            <td>Sesekali</td>
-                            <td>Sesekali</td>
-                            <td>Ringan</td>
+                            <td>{{t.name}} </td>
+                            {{ pilih(t.k1) }}
+                            {{ pilih(t.k2) }}
+                            {{ pilih(t.k3) }}
+                            {{ pilih(t.k4) }}
+                            {{ pilih(t.k5) }}
+                            {{ pilih(t.k6) }}
+                            {{ pilih(t.k7) }}
+                            {{ label(t.c) }}
                             <td></td>
                         </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>

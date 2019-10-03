@@ -12,7 +12,8 @@ from app import create_app, db
 from app.models import Role, User
 from app.commands.import_core import (import_pilihan,
                                         import_label,
-                                        import_roles)
+                                        import_roles,
+                                        import_datatraining)
 from config import Config
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
@@ -47,6 +48,15 @@ def import_core_data():
     time.sleep(2)
     import_roles()
     print("Import roles data has done")
+
+"""Run Import Data Training Using Commands"""
+@manager.command
+def import_data_training():
+    print("Preparing import data training data")
+    print("Please wait .....")
+    time.sleep(2)
+    import_datatraining()
+    print("Import data training has done")
 
 @manager.command
 def test():

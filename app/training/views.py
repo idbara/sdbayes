@@ -19,7 +19,7 @@ from app.training.forms import (
 )
 from app.decorators import admin_required
 from app.email import send_email
-from app.models import EditableHTML, Role, User
+from app.models import EditableHTML, Role, User, Training, Label, Pilihan
 
 training = Blueprint('training', __name__)
 
@@ -28,8 +28,11 @@ training = Blueprint('training', __name__)
 @login_required
 @admin_required
 def index():
-    """Admin dashboard page."""
-    return render_template('training/index.html')
+    """Index Training page."""
+    trainings = Training.query.all()
+    pilihans = Pilihan.query.all()
+    labels = Label.query.all()
+    return render_template('training/index.html', trainings=trainings, pilihans=pilihans, labels=labels) 
 
 
 @training.route('/new-user', methods=['GET', 'POST'])
