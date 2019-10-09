@@ -11,17 +11,17 @@ from flask_login import current_user, login_required
 from flask_rq import get_queue
 
 from app import db
-from app.training.forms import (
-    TrainingForm
-)
+# from app.bayes.forms import (
+    
+# )
 from app.decorators import admin_required
 from app.email import send_email
-from app.models import EditableHTML, Role, User, Training, Label, Pilihan
+from app.models import Training, Label, Pilihan
 
-training = Blueprint('training', __name__)
+bayes = Blueprint('bayes', __name__)
 
 
-@training.route('/')
+@bayes.route('/')
 @login_required
 @admin_required
 def index():
@@ -29,9 +29,9 @@ def index():
     trainings = Training.query.all()
     pilihans = Pilihan.query.all()
     labels = Label.query.all()
-    return render_template('training/index.html', trainings=trainings, pilihans=pilihans, labels=labels) 
+    return render_template('bayes/index.html', trainings=trainings, pilihans=pilihans, labels=labels) 
 
-@training.route('/new-data', methods=['GET', 'POST'])
+@bayes.route('/new-data', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def new_data():
@@ -54,7 +54,7 @@ def new_data():
               'form-success')
     return render_template('training/new_data.html', form=form)
 
-@training.route('/change/<id>', methods=['GET', 'POST'])
+@bayes.route('/change/<id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def change(id):
@@ -77,7 +77,7 @@ def change(id):
               'form-success')
     return render_template('training/change_data.html', form=form)
 
-@training.route('/delete/<int:data_id>')
+@bayes.route('/delete/<int:data_id>')
 @login_required
 @admin_required
 def delete(data_id):

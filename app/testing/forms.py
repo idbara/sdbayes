@@ -13,7 +13,7 @@ from wtforms.validators import Email, EqualTo, InputRequired, Length, DataRequir
 
 from app.models import User,Pilihan,Label
 
-class TrainingForm(FlaskForm):
+class TestingForm(FlaskForm):
     name = StringField(
         'Name', validators=[InputRequired(),
                                   Length(1, 64)])
@@ -44,7 +44,7 @@ class TrainingForm(FlaskForm):
     submit = SubmitField('Save')
 
     def __init__(self, *args, **kwargs):
-        super(TrainingForm, self).__init__(*args, **kwargs)
+        super(TestingForm, self).__init__(*args, **kwargs)
         self.k1.choices = [
             (row.id, row.item)
             for row in Pilihan.query.order_by('id').all()

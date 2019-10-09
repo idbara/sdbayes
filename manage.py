@@ -126,11 +126,14 @@ def setup_general():
 def run_worker():
     """Initializes a slim rq task queue."""
     listen = ['default']
-    conn = Redis(
-        host=app.config['RQ_DEFAULT_HOST'],
-        port=app.config['RQ_DEFAULT_PORT'],
-        db=0,
-        password=app.config['RQ_DEFAULT_PASSWORD'])
+    redis_url = app.config['REDIS_URL']
+    conn = Redis.from_url(redis_url)
+
+    # conn = Redis(
+    #     host=app.config['RQ_DEFAULT_HOST'],
+    #     port=app.config['RQ_DEFAULT_PORT'],
+    #     db=0,
+    #     password=app.config['RQ_DEFAULT_PASSWORD'])
 
     with Connection(conn):
         worker = Worker(map(Queue, listen))

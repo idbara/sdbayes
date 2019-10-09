@@ -11,32 +11,32 @@ from flask_login import current_user, login_required
 from flask_rq import get_queue
 
 from app import db
-from app.training.forms import (
-    TrainingForm
+from app.testing.forms import (
+    TestingForm
 )
 from app.decorators import admin_required
 from app.email import send_email
 from app.models import EditableHTML, Role, User, Training, Label, Pilihan
 
-training = Blueprint('training', __name__)
+testing = Blueprint('testing', __name__)
 
 
-@training.route('/')
+@testing.route('/')
 @login_required
 @admin_required
 def index():
-    """Index Training page."""
+    """Index Testing page."""
     trainings = Training.query.all()
     pilihans = Pilihan.query.all()
     labels = Label.query.all()
     return render_template('training/index.html', trainings=trainings, pilihans=pilihans, labels=labels) 
 
-@training.route('/new-data', methods=['GET', 'POST'])
+@testing.route('/new-data', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def new_data():
     """Create a new data training."""
-    form = TrainingForm()
+    form = TestingForm()
     if form.validate_on_submit():
         datatraining = Training(
             name=form.name.data,
@@ -54,13 +54,13 @@ def new_data():
               'form-success')
     return render_template('training/new_data.html', form=form)
 
-@training.route('/change/<id>', methods=['GET', 'POST'])
+@testing.route('/change/<id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def change(id):
     """Create a change data training."""
     datatraining = Training.query.filter_by(id=id).first()
-    form = TrainingForm(obj=datatraining)
+    form = TestingForm(obj=datatraining)
     if form.validate_on_submit():
         datatraining.name = form.name.data
         datatraining.k1=form.k1.data,
@@ -77,7 +77,7 @@ def change(id):
               'form-success')
     return render_template('training/change_data.html', form=form)
 
-@training.route('/delete/<int:data_id>')
+@testing.route('/delete/<int:data_id>')
 @login_required
 @admin_required
 def delete(data_id):

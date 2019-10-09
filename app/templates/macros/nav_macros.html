@@ -22,10 +22,12 @@
 {% macro header_items(current_user) %}
     {% set endpoints = [
       ('main.index', config.APP_NAME, 'home'),
-      ('main.about', 'About', 'info')
+      ('main.about', 'Diagnosa', 'info'),
+      ('training.index', 'Data Training', 'file outline'),
     ]%}
     {% set user = [] %}
     {% if current_user.is_authenticated %}
+      
       {% set user = ([(current_user.role.index + '.index', current_user.role.name + ' Dashboard', 'user')]) %}
     {% endif %} 
     {{ render_menu_items( endpoints +  user ) }}
