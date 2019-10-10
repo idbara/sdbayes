@@ -80,7 +80,7 @@ def create_app(config):
     from .training import training as training_blueprint
     app.register_blueprint(training_blueprint, url_prefix='/training')
 
-    from .bayes import bayes as bayes_blueprint
-    app.register_blueprint(bayes_blueprint, url_prefix='/bayes')
+    from .pasien import pasien as pasien_blueprint
+    app.register_blueprint(pasien_blueprint, url_prefix='/pasien')
 
     return app

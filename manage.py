@@ -30,6 +30,27 @@ manager.add_command('db', MigrateCommand)
 
 """Run Import Core Data Using Commands"""
 @manager.command
+def import_dev():
+    print("Preparing import core data")
+    print("Please wait .....")
+    time.sleep(2)
+    import_core_data()
+    print("Import core data has done")
+
+    print("Preparing import training data")
+    print("Please wait .....")
+    time.sleep(2)
+    import_data_training()
+    print("Import training data has done")
+
+    print("Preparing setup")
+    print("Please wait .....")
+    time.sleep(2)
+    setup_general()
+    print("setup has done")
+
+"""Run Import Core Data Using Commands"""
+@manager.command
 def import_core_data():
     print("Preparing import pilihan data")
     print("Please wait .....")
@@ -120,6 +141,18 @@ def setup_general():
             db.session.add(user)
             db.session.commit()
             print('Added administrator {}'.format(user.full_name()))
+    pasien_query = Role.query.filter_by(name='Pasien')
+    if pasien_query.first() is not None:
+        if User.query.filter_by(email='pasien@admin.com').first() is None:
+            pasien = User(
+                first_name='Aulina',
+                last_name='Putri',
+                password=Config.ADMIN_PASSWORD,
+                confirmed=True,
+                email='pasien@admin.com')
+            db.session.add(pasien)
+            db.session.commit()
+            print('Added pasien {}'.format(pasien.full_name()))
 
 
 @manager.command

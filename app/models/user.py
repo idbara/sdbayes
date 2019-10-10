@@ -55,7 +55,7 @@ class User(UserMixin, db.Model):
         if self.role is None:
             if self.email == current_app.config['ADMIN_EMAIL']:
                 self.role = Role.query.filter_by(
-                    permissions=Permission.ADMINISTER).first()
+                    name='Administrator').first()
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
 

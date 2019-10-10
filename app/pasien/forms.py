@@ -11,12 +11,12 @@ from wtforms.fields import (
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import Email, EqualTo, InputRequired, Length, DataRequired
 
-from app.models import User,Pilihan,Label
+from app.models import User,Pilihan,Label,Pasien,Role
 
-class TestingForm(FlaskForm):
-    name = StringField(
-        'Name', validators=[InputRequired(),
-                                  Length(1, 64)])
+class PasienForm(FlaskForm):
+    user = SelectField('Pasien :',
+                           validators=[DataRequired()],
+                           coerce=int)
     k1 = SelectField('Merasa gelisah, cemas atau amat tegang :',
                            validators=[DataRequired()],
                            coerce=int)
@@ -38,13 +38,16 @@ class TestingForm(FlaskForm):
     k7 = SelectField('Merasa takut seolah-olah sesuatu yang mengerikan/buruk mungkin terjadi :',
                            validators=[DataRequired()],
                            coerce=int)
-    c = SelectField('Tingkat kecemasam :',
-                           validators=[DataRequired()],
-                           coerce=int)
     submit = SubmitField('Save')
 
     def __init__(self, *args, **kwargs):
-        super(TestingForm, self).__init__(*args, **kwargs)
+        super(PasienForm, self).__init__(*args, **kwargs)
+        # User.query.all() 
+        self.user.choices = [
+            (row.id, row.full_name())
+            # for row in User.query.all()
+            for row in User.query.filter_by(role_id=1).all()
+        ]
         self.k1.choices = [
             (row.id, row.item)
             for row in Pilihan.query.order_by('id').all()
@@ -73,7 +76,8 @@ class TestingForm(FlaskForm):
             (row.id, row.item)
             for row in Pilihan.query.order_by('id').all()
         ]
-        self.c.choices = [
-            (row.id, row.item)
-            for row in Label.query.order_by('id').all()
-        ]
+    def validate_pasien(self, field):
+        if Pasien.query.filter_by(user=field.data).first():
+            raise ValidationError('User already. (Did you mean to '
+                                  '<a href="{}">Check</a>?)'.format(
+                                    url_for('pasien.index')))
