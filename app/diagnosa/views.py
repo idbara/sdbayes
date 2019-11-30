@@ -29,7 +29,7 @@ def index():
     diagnosa = Pasien.query.all()
     pilihans = Pilihan.query.all()
     labels = Label.query.all()
-    return render_template('training/index.html', diagnosa=diagnosa, pilihans=pilihans, labels=labels) 
+    return render_template('diagnosa/index.html', diagnosa=diagnosa, pilihans=pilihans, labels=labels) 
 
 @diagnosa.route('/new-data', methods=['GET', 'POST'])
 @login_required

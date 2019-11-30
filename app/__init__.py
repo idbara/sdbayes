@@ -83,4 +83,7 @@ def create_app(config):
     from .pasien import pasien as pasien_blueprint
     app.register_blueprint(pasien_blueprint, url_prefix='/pasien')
 
+    from .diagnosa import diagnosa as diagnosa_blueprint
+    app.register_blueprint(diagnosa_blueprint, url_prefix='/diagnosa')
+
     return app
