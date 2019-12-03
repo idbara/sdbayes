@@ -6,6 +6,7 @@ from flask import (
     render_template,
     request,
     url_for,
+    jsonify
 )
 from flask_login import current_user, login_required
 from flask_rq import get_queue
@@ -18,15 +19,26 @@ from app.decorators import admin_required
 from app.email import send_email
 from app.models import EditableHTML, Role, User, Pasien, Label, Pilihan
 
+from app.diagnosa.bayes import getDataTraining,getJumlahData,getJumlahKriteria,getJumlahC,bayes
+import json
+
 diagnosa = Blueprint('diagnosa', __name__)
 
+@diagnosa.route('/datatraining')
+@login_required
+@admin_required
+def getData():
+    d = bayes(1)
+    return str(d)
+    # data = Pasien.query.filter_by(id=1).first()
+    # return str(data.k1)
 
 @diagnosa.route('/')
 @login_required
 @admin_required
 def index():
     """Index Diagnosa page."""
-    diagnosa = Pasien.query.all()
+    diagnosa = Pasien.query.join(User, Pasien.user == User.id).add_columns(Pasien.id,User.first_name.label('first_name'),User.last_name.label('last_name'),Pasien.k1,Pasien.k2,Pasien.k3,Pasien.k4,Pasien.k5,Pasien.k6,Pasien.k7).all()
     pilihans = Pilihan.query.all()
     labels = Label.query.all()
     return render_template('diagnosa/index.html', diagnosa=diagnosa, pilihans=pilihans, labels=labels) 

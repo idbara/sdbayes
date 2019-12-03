@@ -48,7 +48,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for t in pasien %}
+                        {% for t in diagnosa %}
                         <tr>
                             <td>{{t.first_name}} {{t.last_name}}</td>
                             {{ pilih(t.k1) }}
@@ -58,8 +58,8 @@
                             {{ pilih(t.k5) }}
                             {{ pilih(t.k6) }}
                             {{ pilih(t.k7) }}
-                            <!-- {{ label(t.c) }} -->
-                            <td><a class="ui compact icon button yellow" href="{{ url_for('pasien.change', id=t.id) }}"><i class="edit icon"></i></a> <a class="ui compact icon button red" href="{{ url_for('pasien.delete', data_id=t.id) }}"><i class="delete icon"></i></a></td>
+                            <td>Test</td>
+                            <td><a class="ui compact icon button blue" href="{{ url_for('pasien.change', id=t.id) }}">Detail</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
