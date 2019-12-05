@@ -32,7 +32,8 @@
             </h2>
             
             <div class="ui two column stackable grid">
-                <table id="example" class="ui celled table" style="width:100%">
+                <!-- ui celled table responsive nowrap unstackable -->
+                <table id="example" class="ui celled table responsive" style="width:100%">
                     <thead>
                         <tr>
                             <th>Nama</th>
@@ -44,6 +45,10 @@
                             <th>Menjadi mudah jengkel atau lekas marah</th>
                             <th>Merasa takut seolah-olah sesuatu yang mengerikan/buruk mungkin terjadi</th>
                             <th>Tingkat kecemasan</th>
+                            <!-- <th>P. Sedikit/tidak ada</th>
+                            <th>P. Ringan</th>
+                            <th>P. Sedang</th>
+                            <th>P. Parah</th> -->
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -58,8 +63,21 @@
                             {{ pilih(t.k5) }}
                             {{ pilih(t.k6) }}
                             {{ pilih(t.k7) }}
-                            <td>Test</td>
-                            <td><a class="ui compact icon button blue" href="{{ url_for('pasien.change', id=t.id) }}">Detail</a></td>
+                            {% if(t.tingkatkecemasan == "Sedikit atau tidak ada") %}
+                                <td bgcolor="#2185d0" style="color: white;">{{ t.tingkatkecemasan }}</td>
+                            {% elif(t.tingkatkecemasan == "Ringan") %}
+                                <td bgcolor="#2ecc40" style="color: white;">{{ t.tingkatkecemasan }}</td>
+                            {% elif(t.tingkatkecemasan == "Sedang") %}
+                                <td bgcolor="ff851b" style="color: white;">{{ t.tingkatkecemasan }}</td>
+                            {% elif(t.tingkatkecemasan == "Parah") %}
+                                <td bgcolor="#ff695e">{{ t.tingkatkecemasan }}</td>
+                            {% endif %}
+                            
+                            <!-- <td>{{ t.sedikitatautidakada }}</td>
+                            <td>{{ t.ringan }}</td>
+                            <td>{{ t.sedang }}</td>
+                            <td>{{ t.parah }}</td> -->
+                            <td><a class="ui compact icon button blue" href="{{ url_for('diagnosa.detail', id=t.id) }}">Detail</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>

@@ -1,5 +1,7 @@
 from app.models import Training,Pasien
 from _operator import itemgetter
+# from app import db
+# from app.models.diagnosa import Diagnosa
 # function bayes
 def bayes(id_pasien):
     data = getDataTraining()
@@ -13,7 +15,6 @@ def bayes(id_pasien):
     PCiparah = getJumlahC(4)/SumPCi
 
     # P(Merasa gelisah, cemas atau amat tegang|Ci)
-    SumP1Ci = getJumlahKriteria('k1',pasien.k1,1)+getJumlahKriteria('k1',pasien.k1,2)+getJumlahKriteria('k1',pasien.k1,3)+getJumlahKriteria('k1',pasien.k1,4)
     P1C1 = getJumlahKriteria('k1',pasien.k1,1)/getJumlahC(1)
     P1C2 = getJumlahKriteria('k1',pasien.k1,2)/getJumlahC(2)
     P1C3 = getJumlahKriteria('k1',pasien.k1,3)/getJumlahC(3)
@@ -77,7 +78,18 @@ def bayes(id_pasien):
 
     # tingkat kecemasan
     tk = stup[0][0]
-    result = (pasien.id,tk,(stup))
+    result = (pasien.user,tk,(tup))
+
+    # insert db
+    # data = Diagnosa(
+    #     user=pasien.id,
+    #     tingkatkecemasan = tk,
+    #     sedikitatautidakada = PC1,
+    #     ringan = PC2,
+    #     sedang = PC3,
+    #     parah = PC4)
+    # db.session.add(data)
+    # db.session.commit()
 
     return result
 

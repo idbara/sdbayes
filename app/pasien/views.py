@@ -16,7 +16,9 @@ from app.pasien.forms import (
 )
 from app.decorators import admin_required
 from app.email import send_email
-from app.models import EditableHTML, Role, User, Pasien, Label, Pilihan
+from app.models import EditableHTML, Role, User, Pasien, Label, Pilihan,Diagnosa
+
+from app.diagnosa.bayes import bayes
 
 pasien = Blueprint('pasien', __name__)
 
@@ -52,9 +54,22 @@ def new_data():
                 k7=form.k7.data)
             db.session.add(datapasien)
             db.session.commit()
+            result = bayes(datapasien.id)
+            data = Diagnosa(
+                user=result[0],
+                tingkatkecemasan = result[1],
+                sedikitatautidakada = result[2][0][1],
+                ringan = result[2][1][1],
+                sedang = result[2][2][1],
+                parah = result[2][3][1])
+            db.session.add(data)
+            db.session.commit()
+
             name = User.query.filter_by(id=form.user.data).first()
-            flash('Data pasien {} successfully created'.format(name.full_name()),
+            flash('Data pasien {} successfully created & diagnosa'.format(name.full_name()),
                 'form-success')
+            # flash('Data pasien {} successfully created & diagnosa'.format(datapasien.id),
+            #     'form-success')
     return render_template('pasien/new_data.html', form=form)
 
 @pasien.route('/change/<id>', methods=['GET', 'POST'])
@@ -75,6 +90,16 @@ def change(id):
         datapasien.k6=form.k6.data,
         datapasien.k7=form.k7.data
         db.session.add(datapasien)
+        db.session.commit()
+        result = bayes(datapasien.id)
+        data = Diagnosa.query.filter_by(user=datapasien.user).first()
+        data.user=result[0]
+        data.tingkatkecemasan = result[1]
+        data.sedikitatautidakada = result[2][0][1]
+        data.ringan = result[2][1][1]
+        data.sedang = result[2][2][1]
+        data.parah = result[2][3][1]
+        db.session.add(data)
         db.session.commit()
         name = User.query.filter_by(id=form.user.data).first()
         flash('Data pasien {} successfully changed'.format(name.full_name()),

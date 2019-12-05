@@ -7,3 +7,4 @@ from .user import *  # noqa
 from .miscellaneous import *  # noqa
 from .training import *  # noqa
 from .pasien import *  # noqa
+from .diagnosa import *  # noqa

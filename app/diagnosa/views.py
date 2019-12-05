@@ -17,10 +17,11 @@ from app.diagnosa.forms import (
 )
 from app.decorators import admin_required
 from app.email import send_email
-from app.models import EditableHTML, Role, User, Pasien, Label, Pilihan
+from app.models import EditableHTML, Role, User, Pasien, Label, Pilihan,Diagnosa, Training
 
 from app.diagnosa.bayes import getDataTraining,getJumlahData,getJumlahKriteria,getJumlahC,bayes
 import json
+
 
 diagnosa = Blueprint('diagnosa', __name__)
 
@@ -28,8 +29,8 @@ diagnosa = Blueprint('diagnosa', __name__)
 @login_required
 @admin_required
 def getData():
-    d = bayes(1)
-    return str(d)
+    d = bayes(2)
+    return str(d[2][0][1])
     # data = Pasien.query.filter_by(id=1).first()
     # return str(data.k1)
 
@@ -38,65 +39,18 @@ def getData():
 @admin_required
 def index():
     """Index Diagnosa page."""
-    diagnosa = Pasien.query.join(User, Pasien.user == User.id).add_columns(Pasien.id,User.first_name.label('first_name'),User.last_name.label('last_name'),Pasien.k1,Pasien.k2,Pasien.k3,Pasien.k4,Pasien.k5,Pasien.k6,Pasien.k7).all()
+    diagnosa = Pasien.query.join(User, Pasien.user == User.id).join(Diagnosa, Pasien.user == Diagnosa.user).add_columns(Pasien.id,User.first_name.label('first_name'),User.last_name.label('last_name'),Pasien.k1,Pasien.k2,Pasien.k3,Pasien.k4,Pasien.k5,Pasien.k6,Pasien.k7,Diagnosa.tingkatkecemasan,Diagnosa.sedikitatautidakada,Diagnosa.ringan,Diagnosa.sedang,Diagnosa.parah).all()
     pilihans = Pilihan.query.all()
     labels = Label.query.all()
     return render_template('diagnosa/index.html', diagnosa=diagnosa, pilihans=pilihans, labels=labels) 
 
-@diagnosa.route('/new-data', methods=['GET', 'POST'])
+@diagnosa.route('/detail/<id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
-def new_data():
-    """Create a new data training."""
-    form = DiagnosaForm()
-    if form.validate_on_submit():
-        datatraining = Training(
-            name=form.name.data,
-            k1=form.k1.data,
-            k2=form.k2.data,
-            k3=form.k3.data,
-            k4=form.k4.data,
-            k5=form.k5.data,
-            k6=form.k6.data,
-            k7=form.k7.data,
-            c=form.c.data)
-        db.session.add(datatraining)
-        db.session.commit()
-        flash('Data training {} successfully created'.format(datatraining.name),
-              'form-success')
-    return render_template('training/new_data.html', form=form)
-
-@diagnosa.route('/change/<id>', methods=['GET', 'POST'])
-@login_required
-@admin_required
-def change(id):
+def detail(id):
     """Create a change data training."""
-    datatraining = Pasien.query.filter_by(id=id).first()
-    form = DiagnosaForm(obj=datatraining)
-    if form.validate_on_submit():
-        datatraining.name = form.name.data
-        datatraining.k1=form.k1.data,
-        datatraining.k2=form.k2.data,
-        datatraining.k3=form.k3.data,
-        datatraining.k4=form.k4.data,
-        datatraining.k5=form.k5.data,
-        datatraining.k6=form.k6.data,
-        datatraining.k7=form.k7.data,
-        datatraining.c=form.c.data
-        db.session.add(datatraining)
-        db.session.commit()
-        flash('Data training {} successfully changed'.format(datatraining.name),
-              'form-success')
-    return render_template('training/change_data.html', form=form)
-
-@diagnosa.route('/delete/<int:data_id>')
-@login_required
-@admin_required
-def delete(data_id):
-    """Delete a data training."""
+    trainings = Training.query.all()
+    pilihans = Pilihan.query.all()
+    labels = Label.query.all()
     
-    data = Training.query.filter_by(id=data_id).first()
-    db.session.delete(data)
-    db.session.commit()
-    flash('Successfully deleted data %s.' % data.name, 'success')
-    return redirect(url_for('training.index'))
+    return render_template('diagnosa/detail.html', trainings=trainings, pilihans=pilihans, labels=labels)

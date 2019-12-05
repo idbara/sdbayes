@@ -26,16 +26,15 @@
 
 {% block content %}
     <div class="ui stackable centered grid container">
-        <div class="twelve wide column">
+        <div class="twelve column">
             <h2 class="ui header">
-                Bayes 
+                Detail Diagnosa
             </h2>
             
             <div class="ui two column stackable grid">
-                <table id="example" class="ui celled table" style="width:100%">
+                <table id="example" class="ui celled table responsive" style="width:100%">
                     <thead>
                         <tr>
-                            <th>Nama</th>
                             <th>Merasa gelisah, cemas atau amat tegang</th>
                             <th>Tidak mampu menghentikan atau mengendalikan rasa khawatir</th>
                             <th>Terlalu mengkhawatirkan berbagai hal</th>
@@ -44,13 +43,11 @@
                             <th>Menjadi mudah jengkel atau lekas marah</th>
                             <th>Merasa takut seolah-olah sesuatu yang mengerikan/buruk mungkin terjadi</th>
                             <th>Tingkat kecemasan</th>
-                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for t in trainings %}
                         <tr>
-                            <td>{{t.name}} </td>
                             {{ pilih(t.k1) }}
                             {{ pilih(t.k2) }}
                             {{ pilih(t.k3) }}
@@ -59,7 +56,6 @@
                             {{ pilih(t.k6) }}
                             {{ pilih(t.k7) }}
                             {{ label(t.c) }}
-                            <td><a class="ui compact icon button yellow" href="{{ url_for('training.change', id=t.id) }}"><i class="edit icon"></i></a> <a class="ui compact icon button red" href="{{ url_for('training.delete', data_id=t.id) }}"><i class="delete icon"></i></a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
