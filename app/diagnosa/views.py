@@ -19,7 +19,7 @@ from app.decorators import admin_required
 from app.email import send_email
 from app.models import EditableHTML, Role, User, Pasien, Label, Pilihan,Diagnosa, Training
 
-from app.diagnosa.bayes import getDataTraining,getJumlahData,getJumlahKriteria,getJumlahC,bayes
+from app.diagnosa.bayes import getDataTraining,getJumlahData,getJumlahKriteria,getJumlahC,bayes,getAtribut,getC,likehood
 import json
 
 
@@ -48,9 +48,19 @@ def index():
 @login_required
 @admin_required
 def detail(id):
-    """Create a change data training."""
+    """Detail data diagnosa."""
     trainings = Training.query.all()
     pilihans = Pilihan.query.all()
     labels = Label.query.all()
-    
-    return render_template('diagnosa/detail.html', trainings=trainings, pilihans=pilihans, labels=labels)
+    diagnosa = Pasien.query.filter_by(id=id).join(User, Pasien.user ==User.id).add_columns(Pasien.id,User.first_name.label('first_name'),User.last_name.label('last_name'),Pasien.k1,Pasien.k2,Pasien.k3,Pasien.k4,Pasien.k5,Pasien.k6,Pasien.k7,Pasien.user).first()
+    k1 = getAtribut('k1')
+    k2 = getAtribut('k2')
+    k3 = getAtribut('k3')
+    k4 = getAtribut('k4')
+    k5 = getAtribut('k5')
+    k6 = getAtribut('k6')
+    k7 = getAtribut('k7')
+    c = getC()
+    lh = likehood(id)
+    hasildiagnosa = Diagnosa.query.filter_by(user=diagnosa.user).add_columns(Diagnosa.tingkatkecemasan).first()
+    return render_template('diagnosa/detail.html', trainings=trainings, pilihans=pilihans, labels=labels,diagnosa=diagnosa,k1=k1,k2=k2,k3=k3,k4=k4,k5=k5,k6=k6,k7=k7,c=c,lh=lh,hasildiagnosa=hasildiagnosa)
