@@ -31,7 +31,7 @@ class Config:
 
     # Database
     DATABASE_URI = os.environ.get('DATABASE_URI', 'mysql+pymysql://root:12345678@localhost/sdbayesdev?charset=utf8mb4')
-
+    print(DATABASE_URI)
     # Email
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.sendgrid.net')
     MAIL_PORT = os.environ.get('MAIL_PORT', 587)
@@ -103,7 +103,7 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI','mysql+pymysql://root:12345678@localhost/sdbayesdev?charset=utf8mb4')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI','mysql+pymysql://admin:12345678@localhost/sdbayesdev?charset=utf8mb4')
     SSL_DISABLE = (os.environ.get('SSL_DISABLE', 'True') == 'True')
 
     @classmethod
