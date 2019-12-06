@@ -103,7 +103,7 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL','mysql+pymysql://root:12345678@localhost/sdbayesdev?charset=utf8mb4')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI','mysql+pymysql://root:12345678@localhost/sdbayesdev?charset=utf8mb4')
     SSL_DISABLE = (os.environ.get('SSL_DISABLE', 'True') == 'True')
 
     @classmethod
