@@ -1,0 +1,111 @@
+{% extends 'layouts/base.html' %}
+
+{% macro pilih(pilihan_id) %}
+    {% for p in pilihans %}
+        {%if  pilihan_id == p.id%}
+            <td>{{ p.item }}</td>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+{% macro label(label_id) %}
+    {% for l in labels %}
+        {%if  label_id == l.id%}
+            <td>{{ l.item }}</td>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+{% macro add_menu(title, endpoint, icon=None) %}
+    <a class="ui basic button" href="{{ url_for(endpoint) }}">
+        {% if icon is not none %}
+            <i class="{{ icon }}"></i>
+        {% endif %}
+        {{ title }}
+    </a>
+{% endmacro %}
+
+
+{% block content %}
+    <div class="ui stackable centered grid container">
+        <div class="twelve column">
+            <h2 class="ui header">
+                Hasil Diagnosa Pasien {{ diagnosa.first_name }} {{ diagnosa.last_name }}
+            </h2>
+            <hr>
+
+            <div class="ui">
+                <div id="piechart" style="width: 100%; height: 500px;"></div>
+            </div>
+            
+            <div class="ui">
+                <table class="ui definition table">
+                    
+                    <tbody>
+                        <tr>
+                            <td>Probabilitas Sedikit atau tidak ada</td>
+                            <td>{{ hasildiagnosa.sedikitatautidakada }}</td>
+                        </tr>
+                        <tr>
+                            <td>Probabilitas Ringan</td>
+                            <td>{{hasildiagnosa.ringan}}</td>
+                        </tr>
+                        <tr>
+                            <td>Probabilitas Sedang</td>
+                            <td>{{ hasildiagnosa.sedang }}</td>
+                        </tr>
+                        <tr>
+                            <td>Probabilitas Parah</td>
+                            <td>{{ hasildiagnosa.parah }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <div class="ui">
+                {% if(hasildiagnosa.tingkatkecemasan == 'Parah') %}
+                <div class="ui huge red label">
+                    Berdasarkan perhitungan, maka Pasien <b>{{ diagnosa.first_name }} {{ diagnosa.last_name }}</b> mengalami tingkat gangguan kecemasan tergenerelasisikan <b>{{ hasildiagnosa.tingkatkecemasan }}</b>.
+                </div>
+                {% elif(hasildiagnosa.tingkatkecemasan == 'Sedang') %}
+                <div class="ui huge orange label">
+                    Berdasarkan perhitungan, maka Pasien <b>{{ diagnosa.first_name }} {{ diagnosa.last_name }}</b> mengalami tingkat gangguan kecemasan tergenerelasisikan <b>{{ hasildiagnosa.tingkatkecemasan }}</b>.
+                </div>
+                {% elif(hasildiagnosa.tingkatkecemasan == 'Ringan') %}
+                <div class="ui huge green label">
+                    Berdasarkan perhitungan, maka Pasien <b>{{ diagnosa.first_name }} {{ diagnosa.last_name }}</b> mengalami tingkat gangguan kecemasan tergenerelasisikan <b>{{ hasildiagnosa.tingkatkecemasan }}</b>.
+                </div>
+                {% elif(hasildiagnosa.tingkatkecemasan == 'Sedikit atau tidak ada') %}
+                <div class="ui huge blue label">
+                    Berdasarkan perhitungan, maka Pasien <b>{{ diagnosa.first_name }} {{ diagnosa.last_name }}</b> mengalami tingkat gangguan kecemasan tergenerelasisikan <b>{{ hasildiagnosa.tingkatkecemasan }}</b>.
+                </div>
+                {% endif %}
+            </div>
+            <br><br>
+        </div>
+    </div>
+    <script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    } );
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+    var data = google.visualization.arrayToDataTable([
+        ['Tingkat Kecemasan', '%'],
+        ['Sedikit atau tidak ada',     0.975833],
+        ['Ringan',      0.0205057],
+        ['Sedang',  0.0036142],
+        ['Parah', 0.0000472452]
+    ]);
+
+    var options = {
+        title: 'Hasil Diagnosa'
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+    chart.draw(data, options);
+    }
+    </script>
+{% endblock %}

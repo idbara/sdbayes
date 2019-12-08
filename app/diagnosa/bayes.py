@@ -124,7 +124,6 @@ def likehood(id_pasien):
 
 # function bayes
 def bayes(id_pasien):
-    data = getDataTraining()
     pasien = Pasien.query.filter_by(id=id_pasien).first()
 
     # P(Ci)
@@ -200,21 +199,10 @@ def bayes(id_pasien):
     tk = stup[0][0]
     result = (pasien.user,tk,(tup))
 
-    # insert db
-    # data = Diagnosa(
-    #     user=pasien.id,
-    #     tingkatkecemasan = tk,
-    #     sedikitatautidakada = PC1,
-    #     ringan = PC2,
-    #     sedang = PC3,
-    #     parah = PC4)
-    # db.session.add(data)
-    # db.session.commit()
-
     return result
 
 def getDataTraining():
-    training = Training.query.all()
+    return Training.query.all()
 
 def getJumlahData():
     return Training.query.count()

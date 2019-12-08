@@ -12,9 +12,10 @@ from flask_rq import get_queue
 
 from app import db
 from app.pasien.forms import (
-    PasienForm
+    PasienForm,
+    PasienInputForm
 )
-from app.decorators import admin_required
+from app.decorators import admin_required,pasien_required
 from app.email import send_email
 from app.models import EditableHTML, Role, User, Pasien, Label, Pilihan,Diagnosa
 
@@ -117,3 +118,67 @@ def delete(data_id):
     db.session.commit()
     flash('Successfully deleted data %s.' % user.full_name(), 'success')
     return redirect(url_for('pasien.index'))
+
+@pasien.route('/input', methods=['GET', 'POST'])
+@login_required
+@pasien_required
+def input():
+    """Create a new data pasien."""
+    if Pasien.query.filter_by(user=current_user.id).first():
+        datapasien = Pasien.query.filter_by(user=current_user.id).first()
+        print(datapasien)
+        form = PasienInputForm(obj=datapasien)
+    else:
+        form = PasienInputForm()
+    if form.validate_on_submit():
+        if Pasien.query.filter_by(user=current_user.id).first():
+            datapasien.user = current_user.id
+            datapasien.k1=form.k1.data,
+            datapasien.k2=form.k2.data,
+            datapasien.k3=form.k3.data,
+            datapasien.k4=form.k4.data,
+            datapasien.k5=form.k5.data,
+            datapasien.k6=form.k6.data,
+            datapasien.k7=form.k7.data
+            db.session.add(datapasien)
+            db.session.commit()
+            result = bayes(datapasien.id)
+            data = Diagnosa.query.filter_by(user=datapasien.user).first()
+            data.user=result[0]
+            data.tingkatkecemasan = result[1]
+            data.sedikitatautidakada = result[2][0][1]
+            data.ringan = result[2][1][1]
+            data.sedang = result[2][2][1]
+            data.parah = result[2][3][1]
+            db.session.add(data)
+            db.session.commit()
+            name = User.query.filter_by(id=current_user.id).first()
+            flash('Data pasien {} successfully changed'.format(name.full_name()),
+                'form-success')
+        else:
+            datapasien = Pasien(
+                user=current_user.id,
+                k1=form.k1.data,
+                k2=form.k2.data,
+                k3=form.k3.data,
+                k4=form.k4.data,
+                k5=form.k5.data,
+                k6=form.k6.data,
+                k7=form.k7.data)
+            db.session.add(datapasien)
+            db.session.commit()
+            result = bayes(datapasien.id)
+            data = Diagnosa(
+                user=result[0],
+                tingkatkecemasan = result[1],
+                sedikitatautidakada = result[2][0][1],
+                ringan = result[2][1][1],
+                sedang = result[2][2][1],
+                parah = result[2][3][1])
+            db.session.add(data)
+            db.session.commit()
+
+            name = User.query.filter_by(id=current_user.id).first()
+            flash('Data pasien {} successfully created & diagnosa'.format(name.full_name()),
+                'form-success')
+    return render_template('pasien/input.html', form=form)

@@ -3,14 +3,27 @@
 #}
 
 {% macro render_menu_items(endpoints) %}
-    {% for endpoint, name, icon in endpoints %}
+    {% for endpoint, name, icon,id in endpoints %}
+      {% if id %}
+        <a class="item {% if request.endpoint == endpoint %}active{% endif %}" href="{{ url_for(endpoint,id=id) }}">
+          {% if icon %}
+              <i class="{{ icon }} icon"></i>
+          {% endif %}
+          {{ name | safe }}
+        </a>
+      {% else %}
         <a class="item {% if request.endpoint == endpoint %}active{% endif %}" href="{{ url_for(endpoint) }}">
             {% if icon %}
                 <i class="{{ icon }} icon"></i>
             {% endif %}
             {{ name | safe }}
         </a>
+      {% endif %}
     {% endfor %}
+{% endmacro %}
+
+{% macro menu_item_id(url,id) %}
+    {{ url_for(url, id=id) }}
 {% endmacro %}
 
 {# This is called for all users (including anonymous users). It renders the basic left side of the 
@@ -21,12 +34,16 @@
 
 {% macro header_items(current_user) %}
     {% set endpoints = [
-      ('main.index', config.APP_NAME, 'home')
+      ('main.index', config.APP_NAME, 'home', '')
     ]%}
     {% set user = [] %}
-    {% set menu = [] %}
     {% if current_user.is_authenticated %}
-      {% set user = ([('training.index', 'Data Training', 'file outline'),('pasien.index', 'Data Pasien', 'file outline'),('diagnosa.index', 'Diagnosa', 'file outline'),(current_user.role.index + '.index', current_user.role.name + ' Dashboard', 'user')]) %}
+      {% if current_user.role.name == 'Administrator' %}
+      {% set user = ([('training.index', 'Data Training', 'file outline', ''),('pasien.index', 'Data Pasien', 'file outline', ''),('diagnosa.index', 'Diagnosa', 'file outline', ''),(current_user.role.index + '.index', current_user.role.name + ' Dashboard', 'user', '')]) %}
+      {% endif %}
+      {% if current_user.role.name == 'Pasien' %}
+      {% set user = ([('pasien.input', 'Data Pasien', 'file outline', ''),('diagnosa.pasien', 'Hasil Diagnosa', 'file outline', current_user.id)]) %}
+      {% endif %}
     {% endif %} 
     {{ render_menu_items( endpoints +  user ) }}
 {% endmacro %}
@@ -37,14 +54,14 @@
 {% macro account_items(current_user) %}
     {% if current_user.is_authenticated %}
       {% set endpoints = [
-        ('account.manage', 'Your Account', 'settings'),
-        ('account.logout', 'Log out', 'sign out')
+        ('account.manage', 'Your Account', 'settings',''),
+        ('account.logout', 'Log out', 'sign out','')
       ] %}
       {{ render_menu_items(endpoints) }}
     {% else %}
       {% set endpoints = [
-        ('account.register', 'Register', 'list layout'),
-        ('account.login', 'Log In', 'sign in')
+        ('account.register', 'Register', 'list layout',''),
+        ('account.login', 'Log In', 'sign in','')
       ] %}
       {{ render_menu_items(endpoints) }}
     {% endif %}

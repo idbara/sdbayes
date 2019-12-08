@@ -21,7 +21,7 @@ if os.path.exists('config.env'):
 
 class Config:
     APP_NAME = os.environ.get('APP_NAME', 'Flask-Base')
-
+    
     if os.environ.get('SECRET_KEY'):
         SECRET_KEY = os.environ.get('SECRET_KEY')
     else:
@@ -79,8 +79,7 @@ class DevelopmentConfig(Config):
     ASSETS_DEBUG = True
     # SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL',
     #     'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite'))
-    SQLALCHEMY_DATABASE_URI = \
-        'mysql+pymysql://root:12345678@localhost/sdbayesdev?charset=utf8mb4'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI', 'mysql+pymysql://sysadmin:alhamdulillah@localhost/skripsi?charset=utf8mb4')
 
 
     @classmethod
@@ -102,9 +101,7 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    print('Production Config used')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI', 'mysql+pymysql://skripsi:alhamdulillah@localhost/skripsi?charset=utf8mb4')
-    print(SQLALCHEMY_DATABASE_URI)
     SSL_DISABLE = (os.environ.get('SSL_DISABLE', 'True') == 'True')
 
     @classmethod

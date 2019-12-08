@@ -10,6 +10,7 @@ from .. import db, login_manager
 class Permission:
     GENERAL = 0x01
     ADMINISTER = 0xff
+    PASIEN = 0x64
 
 
 class Role(db.Model):
