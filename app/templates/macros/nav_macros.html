@@ -21,15 +21,12 @@
 
 {% macro header_items(current_user) %}
     {% set endpoints = [
-      ('main.index', config.APP_NAME, 'home'),
-      ('training.index', 'Data Training', 'file outline'),
-      ('pasien.index', 'Data Pasien', 'file outline'),
-      ('diagnosa.index', 'Diagnosa', 'file outline'),
+      ('main.index', config.APP_NAME, 'home')
     ]%}
     {% set user = [] %}
+    {% set menu = [] %}
     {% if current_user.is_authenticated %}
-      
-      {% set user = ([(current_user.role.index + '.index', current_user.role.name + ' Dashboard', 'user')]) %}
+      {% set user = ([('training.index', 'Data Training', 'file outline'),('pasien.index', 'Data Pasien', 'file outline'),('diagnosa.index', 'Diagnosa', 'file outline'),(current_user.role.index + '.index', current_user.role.name + ' Dashboard', 'user')]) %}
     {% endif %} 
     {{ render_menu_items( endpoints +  user ) }}
 {% endmacro %}
