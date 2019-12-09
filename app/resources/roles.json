@@ -4,17 +4,10 @@
     "name": "Pasien",
     "index": "pasien",
     "default": 1,
-    "permissions": null
+    "permissions": 100
   },
   {
     "id": 2,
-    "name": "Psikolog",
-    "index": "psikolog",
-    "default": 0,
-    "permissions": null
-  },
-  {
-    "id": 3,
     "name": "Administrator",
     "index": "admin",
     "default": 0,

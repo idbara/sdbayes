@@ -25,15 +25,16 @@ class Role(db.Model):
     @staticmethod
     def insert_roles():
         roles = {
-            'Pasien': ('Pasien'),
-            'Psikolog': ('Psikolog'),
-            'Administrator': ('admin')
+            'Pasien': (Permission.PASIEN,'Pasien',True),
+            'Administrator': (Permission.ADMINISTER,'admin',False)
         }
         for r in roles:
             role = Role.query.filter_by(name=r).first()
             if role is None:
                 role = Role(name=r)
-            role.index = roles[r]
+            role.permissions = roles[r][0]
+            role.index = roles[r][1]
+            role.default = roles[r][2]
             db.session.add(role)
         db.session.commit()
 
