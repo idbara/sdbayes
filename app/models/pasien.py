@@ -17,7 +17,6 @@ class Pasien(db.Model):
     k5 = db.Column(db.Integer, db.ForeignKey('pilihan.id'))
     k6 = db.Column(db.Integer, db.ForeignKey('pilihan.id'))
     k7 = db.Column(db.Integer, db.ForeignKey('pilihan.id'))
-    c = db.Column(db.Integer, db.ForeignKey('label.id'))
 
     def __repr__(self):
         return '<Pasien {}>'.format(self.user)

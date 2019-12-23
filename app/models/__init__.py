@@ -4,7 +4,6 @@ module (as opposed to just their python files)
 """
 
 from .user import *  # noqa
-from .miscellaneous import *  # noqa
 from .training import *  # noqa
 from .pasien import *  # noqa
 from .diagnosa import *  # noqa

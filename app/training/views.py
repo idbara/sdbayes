@@ -16,7 +16,7 @@ from app.training.forms import (
 )
 from app.decorators import admin_required
 from app.email import send_email
-from app.models import EditableHTML, Role, User, Training, Label, Pilihan
+from app.models import Role, User, Training, Label, Pilihan
 
 training = Blueprint('training', __name__)
 

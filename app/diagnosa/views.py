@@ -17,7 +17,7 @@ from app.diagnosa.forms import (
 )
 from app.decorators import admin_required,pasien_required
 from app.email import send_email
-from app.models import EditableHTML, Role, User, Pasien, Label, Pilihan,Diagnosa, Training
+from app.models import Role, User, Pasien, Label, Pilihan,Diagnosa, Training
 
 from app.diagnosa.bayes import getDataTraining,getJumlahData,getJumlahKriteria,getJumlahC,bayes,getAtribut,getC,likehood
 import json
