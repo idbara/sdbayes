@@ -3,11 +3,21 @@ language: python #can be any language, just php for example
 services:
   - docker # required, but travis uses older version of docker :(
 
-before_install:
-    - docker build -t bararamadhan/sdbayes .
+# before_install:
+#   - docker build -t bararamadhan/sdbayes .
 
-deploy:
-    provider: script
-    script: bash scripts/deploy.sh
-    on:
-      branch: develop
+# deploy:
+#   provider: script
+#   script: bash scripts/deploy.sh
+#   on:
+#     branch: develop
+
+jobs:
+    include:
+    - stage: build
+        services:
+            - docker
+        before_install:
+            - docker build -t bararamadhan/sdbayes .
+    - stage: deploy
+        script: bash scripts/deploy.sh
