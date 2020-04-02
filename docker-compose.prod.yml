@@ -86,6 +86,8 @@ services:
     container_name: sdbayes-monitor
     volumes:
       - .:/usr/src/run
+    expose: 
+      - 9181
     ports:
       - '9181:9181'
     command: rq-dashboard -H redis
