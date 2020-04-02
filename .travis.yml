@@ -3,6 +3,14 @@ env:
 - SERVER_IP_ADDRESS=182.253.108.28
 jobs:
   include:
+  - stage: build
+    name: Build to Docker Hub
+    script:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker build -t sdbayes .
+    - docker images
+    - docker tag sdbayes $DOCKER_USERNAME/sdbayes
+    - docker push $DOCKER_USERNAME/sdbayes
   - stage: deploy
     name: Deploy to Production
     script:
