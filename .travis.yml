@@ -22,6 +22,6 @@ jobs:
             - ssh-add ./deploy_key
             - ssh -i ./deploy_key sysadmin@$SERVER_IP_ADDRESS pwd
           script:
-            - docker-compose -f docker-compose.yml up
+            - docker-compose -f docker-compose.yml up --build
             - echo -e "Done."
 
