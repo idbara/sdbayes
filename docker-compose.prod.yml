@@ -78,22 +78,6 @@ services:
     networks:
       - local
 
-  monitor:
-    image: bararamadhan/sdbayes:latest
-    container_name: sdbayes-monitor
-    volumes:
-      - sdbayes_data:/usr/src/run
-    expose: 
-      - 9181
-    ports:
-      - '9181:9181'
-    command: 
-      - rq-dashboard -H redis
-    depends_on:
-      - redis
-    networks:
-      - local
-
 networks:
   local:
     driver: bridge
