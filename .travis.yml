@@ -24,8 +24,7 @@ jobs:
           name: "Deploy to Production"
           deploy:
             provider: script
-            skip_cleanup: true
-            # script: ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS mkdir sdbayes 
+            script: ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS mkdir
             script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/ $SSH_USER@$SERVER_IP_ADDRESS:/sdbayes/
             script: ssh -i ./deploy_key sysadmin@$SERVER_IP_ADDRESS docker-compose -f sdbayes/docker-compose.prod.yml up -d --build
             on:
