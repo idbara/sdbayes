@@ -21,6 +21,7 @@ jobs:
             - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
             - ssh-add ./deploy_key
           script:
-            - docker-compose -f docker-compose.prod.yml up -d --no-deps
+            - docker-compose -f docker-compose.prod.yml down
+            - docker-compose -f docker-compose.prod.yml up -d
             - echo -e "Done."
 
