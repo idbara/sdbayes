@@ -17,8 +17,9 @@ services:
       - POSTGRES_PASSWORD=development
       - POSTGRES_USER=development
       - POSTGRES_DB=sdbayes-development
-      - MAIL_USERNAME=bararamadhan
-      - MAIL_PASSWORD=./axbycz123
+      - MAIL_SERVER=smtp.gmail.com
+      - MAIL_USERNAME=apps@bara.my.id
+      - MAIL_PASSWORD=Alhamdulillah
       - TZ=Asia/Jakarta
     links:
       - db
@@ -57,8 +58,9 @@ services:
       - .:/app
     environment:
       - SECRET_KEY=INISANGATRAHASIA!
-      - MAIL_USERNAME=bowo_anakdesa
-      - MAIL_PASSWORD=./axbycz123
+      - MAIL_SERVER=smtp.gmail.com
+      - MAIL_USERNAME=apps@bara.my.id
+      - MAIL_PASSWORD=Alhamdulillah
       - TZ=Asia/Jakarta
     command: python manage.py run_worker
     depends_on:
