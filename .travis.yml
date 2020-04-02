@@ -7,8 +7,8 @@ jobs:
   - stage: deploy
     name: Deploy to Production
     script:
-    - ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS mkdir
-    - scp docker-compose.prod.yml $SSH_USER@$SERVER_IP_ADDRESS:/home/sysadmin/sdbayes/
+    - ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS mkdir $DIR
+    - scp docker-compose.prod.yml $SSH_USER@$SERVER_IP_ADDRESS:$DIR
     - ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS docker-compose -f sdbayes/docker-compose.prod.yml
       up -d --build
 before_install:
