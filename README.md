@@ -17,11 +17,19 @@ $ pip install -r requirements.txt
 ```
 $ python manage.py recreate_db
 ```
+atau
+```
+$ docker-compose run --rm web sh -c "python manage.py recreate_db"
+```
 
 ##### Other setup (e.g. creating core data in database)
 
 ```
 $ python manage.py import_dev
+```
+atau
+```
+$ docker-compose run --rm web sh -c "python manage.py import_dev"
 ```
 
 ## Running the app

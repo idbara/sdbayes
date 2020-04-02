@@ -1,0 +1,12 @@
+APP_NAME="BARA"
+MAIL_SERVER=smtp.yandex.com
+MAIL_USERNAME=dev@puspindes.id
+MAIL_PASSWORD=axbycz
+ADMIN_EMAIL=admin@bara.my.id
+SECRET_KEY=SuperRandomStringToBeUsedForEncryption
+FLASK_CONFIG=production
+DATABASE_URL=localhost
+DATABASE_USER=root
+DATABASE_PASSWORD=
+DATABASE_PORT=3306
+DATABASE_DB=sdbayes

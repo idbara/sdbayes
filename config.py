@@ -20,7 +20,7 @@ if os.path.exists('config.env'):
 
 
 class Config:
-    APP_NAME = os.environ.get('APP_NAME', 'Flask-Base')
+    APP_NAME = os.environ.get('APP_NAME', 'SDBAYES')
     
     if os.environ.get('SECRET_KEY'):
         SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -30,7 +30,12 @@ class Config:
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 
     # Database
-    DATABASE_URI = os.environ.get('DATABASE_URI', 'mysql+pymysql://root:12345678@localhost/sdbayesdev?charset=utf8mb4')
+    POSTGRES_URL = os.environ.get('POSTGRES_URL', 'localhost')
+    POSTGRES_USER = os.environ.get('POSTGRES_USER', 'postgres')
+    POSTGRES_PW = os.environ.get('POSTGRES_PASSWORD', 'password')
+    POSTGRES_PORT = os.environ.get('POSTGRES_PORT', '5432')
+    POSTGRES_DB = os.environ.get('POSTGRES_DB', 'db')
+
     # Email
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.sendgrid.net')
     MAIL_PORT = os.environ.get('MAIL_PORT', 587)
@@ -47,12 +52,13 @@ class Config:
     # Admin account
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'password')
     ADMIN_EMAIL = os.environ.get(
-        'ADMIN_EMAIL', 'admin@admin.com')
+        'ADMIN_EMAIL', 'admin@bara.my.id')
     EMAIL_SUBJECT_PREFIX = '[{}]'.format(APP_NAME)
     EMAIL_SENDER = '{app_name} Admin <{email}>'.format(
         app_name=APP_NAME, email=MAIL_USERNAME)
 
-    REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://127.0.0.1:6379/0')
+    # REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://127.0.0.1:6379/0')
+    REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://sdbayes-redis:6379/0')
 
     # RAYGUN_APIKEY = os.environ.get('RAYGUN_APIKEY')
 
@@ -77,10 +83,12 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     ASSETS_DEBUG = True
-    # SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL',
-    #     'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite'))
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI', 'mysql+pymysql://sysadmin:alhamdulillah@localhost/skripsi?charset=utf8mb4')
-
+    SQLALCHEMY_DATABASE_URI = \
+        'postgres+psycopg2://{user}:{pw}@{url}/{db}'.format(
+            user=Config.POSTGRES_USER,
+            pw=Config.POSTGRES_PW,
+            url=Config.POSTGRES_URL,
+            db=Config.POSTGRES_DB)
 
     @classmethod
     def init_app(cls, app):
@@ -90,8 +98,12 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL',
-        'sqlite:///' + os.path.join(basedir, 'data-test.sqlite'))
+    SQLALCHEMY_DATABASE_URI = \
+        'postgres+psycopg2://{user}:{pw}@{url}/{db}'.format(
+            user=Config.POSTGRES_USER,
+            pw=Config.POSTGRES_PW,
+            url=Config.POSTGRES_URL,
+            db=Config.POSTGRES_DB)
     WTF_CSRF_ENABLED = False
 
     @classmethod
@@ -101,7 +113,12 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI', 'mysql+pymysql://sysadmin:alhamdulillah@localhost/skripsi?charset=utf8mb4')
+    SQLALCHEMY_DATABASE_URI = \
+        'postgres+psycopg2://{user}:{pw}@{url}/{db}'.format(
+            user=Config.POSTGRES_USER,
+            pw=Config.POSTGRES_PW,
+            url=Config.POSTGRES_URL,
+            db=Config.POSTGRES_DB)
     SSL_DISABLE = (os.environ.get('SSL_DISABLE', 'True') == 'True')
 
     @classmethod

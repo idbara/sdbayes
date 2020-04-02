@@ -1,0 +1,100 @@
+version: "3.7"
+
+services:
+  web:
+    restart: always
+    container_name: sdbayes
+    image: web
+    build:
+      context: .
+    volumes:
+        - .:/usr/src/app
+    environment:
+      - FLASK_CONFIG=development
+      - SECRET_KEY=INISANGATRAHASIA!
+      - APP_NAME=SD-Bayes
+      - POSTGRES_URL=sdbayes-postgres
+      - POSTGRES_PASSWORD=development
+      - POSTGRES_USER=development
+      - POSTGRES_DB=sdbayes-development
+      - MAIL_USERNAME=bararamadhan
+      - MAIL_PASSWORD=./axbycz123
+      - TZ=Asia/Jakarta
+    links:
+      - db
+      - redis
+    ports:
+      - 5000:5000
+    command: python manage.py runserver -h 0.0.0.0
+    depends_on:
+      - db
+      - redis
+    networks:
+      - local
+
+  db:
+    restart: always
+    container_name: sdbayes-postgres
+    image: postgres:11-alpine
+    volumes:
+        - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_URL=sdbayes-postgres
+      - POSTGRES_PASSWORD=development
+      - POSTGRES_USER=development
+      - POSTGRES_DB=sdbayes-development
+      - TZ=Asia/Jakarta
+    ports: 
+      - 5432:5432
+    networks:
+      - local
+
+  worker:
+    restart: always
+    image: web
+    container_name: sdbayes-worker
+    volumes:
+      - .:/app
+    environment:
+      - SECRET_KEY=INISANGATRAHASIA!
+      - MAIL_USERNAME=bowo_anakdesa
+      - MAIL_PASSWORD=./axbycz123
+      - TZ=Asia/Jakarta
+    command: python manage.py run_worker
+    depends_on:
+      - redis
+      - db
+    networks:
+      - local
+    
+
+  redis:
+    restart: always
+    container_name: "sdbayes-redis"
+    image: "redis:5.0"
+    volumes:
+      - redis_data:/var/lib/redis/data/
+    networks:
+      - local
+
+  monitor:
+    build: ./monitor
+    image: sdbayes-monitor
+    container_name: sdbayes-monitor
+    volumes:
+      - .:/app
+    ports:
+      - '9181:9181'
+    command: rq-dashboard -H redis
+    depends_on:
+      - redis
+    networks:
+      - local
+
+networks:
+  local:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:

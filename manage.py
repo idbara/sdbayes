@@ -143,13 +143,13 @@ def setup_general():
             print('Added administrator {}'.format(user.full_name()))
     pasien_query = Role.query.filter_by(name='Pasien')
     if pasien_query.first() is not None:
-        if User.query.filter_by(email='pasien@admin.com').first() is None:
+        if User.query.filter_by(email='pasien@bara.my.id').first() is None:
             pasien = User(
-                first_name='Aulina',
-                last_name='Putri',
+                first_name='Pasien',
+                last_name='User',
                 password=Config.ADMIN_PASSWORD,
                 confirmed=True,
-                email='pasien@admin.com')
+                email='pasien@bara.my.id')
             db.session.add(pasien)
             db.session.commit()
             print('Added pasien {}'.format(pasien.full_name()))
