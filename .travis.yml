@@ -1,7 +1,6 @@
 language: python
 env:
 - SERVER_IP_ADDRESS=182.253.108.28
-
 jobs:
   include:
   - stage: deploy
@@ -9,9 +8,12 @@ jobs:
     script:
     - ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS mkdir -p $DIR
     - scp -r docker-compose.prod.yml $SSH_USER@$SERVER_IP_ADDRESS:$DIR
+    - scp -r prod.env $SSH_USER@$SERVER_IP_ADDRESS:$DIR
     - ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS docker-compose -f $DIR/docker-compose.prod.yml
       up -d --build
 before_install:
+- openssl aes-256-cbc -K $encrypted_67820c58a10c_key -iv $encrypted_67820c58a10c_iv
+  -in prod.env.enc -out ./prod.env -d
 - openssl aes-256-cbc -K $encrypted_dfdcfd5172af_key -iv $encrypted_dfdcfd5172af_iv
   -in deploy_key.enc -out ./deploy_key -d
 - eval "$(ssh-agent -s)"
