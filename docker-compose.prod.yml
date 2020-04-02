@@ -23,9 +23,9 @@ services:
     links:
       - db
       - redis
-    command: gunicorn --bind 0.0.0.0:5000 manage:app -w 2 --threads 2
+    command: gunicorn --bind 0.0.0.0:5001 manage:app -w 2 --threads 2
     ports:
-      - 5001:5000
+      - 5001:5001
     expose:
       - 5000
     depends_on:
