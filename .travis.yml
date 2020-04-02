@@ -1,33 +1,21 @@
 language: python
 env:
-    - SERVER_IP_ADDRESS=182.253.108.28
-
-before_deploy:
-    - openssl aes-256-cbc -K $encrypted_dfdcfd5172af_key -iv $encrypted_dfdcfd5172af_iv -in deploy_key.enc -out ./deploy_key -d
-    - eval "$(ssh-agent -s)"
-    - chmod 600 ./deploy_key
-    - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-    - ssh-add ./deploy_key
-    - ssh -i ./deploy_key sysadmin@$SERVER_IP_ADDRESS pwd
+- SERVER_IP_ADDRESS=182.253.108.28
 
 jobs:
-    include:
-        # - stage: build
-        #   name: "Build image and push to docker hub"
-        #   script:
-        #   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        #   - docker build -t sdbayes .
-        #   - docker images
-        #   - docker tag sdbayes $DOCKER_USERNAME/sdbayes
-        #   - docker push $DOCKER_USERNAME/sdbayes
-        - stage: deploy
-          name: "Deploy to Production"
-          script:
-            - ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS mkdir
-            - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/ $SSH_USER@$SERVER_IP_ADDRESS:/sdbayes/
-            - ssh -i ./deploy_key sysadmin@$SERVER_IP_ADDRESS docker-compose -f sdbayes/docker-compose.prod.yml up -d --build
-            
-        #   script:
-        #     - ssh -i ./deploy_key sysadmin@$SERVER_IP_ADDRESS docker-compose -f docker-compose.prod.yml up -d --build
-        #     - echo -e "Done. $SERVER_IP_ADDRESS"
-
+  include:
+  - stage: deploy
+    name: Deploy to Production
+    script:
+    - ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS mkdir
+    - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/ $SSH_USER@$SERVER_IP_ADDRESS:/sdbayes/
+    - ssh -i ./deploy_key sysadmin@$SERVER_IP_ADDRESS docker-compose -f sdbayes/docker-compose.prod.yml
+      up -d --build
+before_install:
+- openssl aes-256-cbc -K $encrypted_dfdcfd5172af_key -iv $encrypted_dfdcfd5172af_iv
+  -in deploy_key.enc -out ./deploy_key -d
+- eval "$(ssh-agent -s)"
+- chmod 600 ./deploy_key
+- echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- ssh-add ./deploy_key
+- ssh -i ./deploy_key sysadmin@$SERVER_IP_ADDRESS pwd
