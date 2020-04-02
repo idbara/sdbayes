@@ -5,12 +5,12 @@ env:
 jobs:
     include:
         - stage: build docker image
-            script:
-            - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-            - docker build -t sdbayes .
-            - docker images
-            - docker tag sdbayes $DOCKER_USERNAME/sdbayes
-            - docker push $DOCKER_USERNAME/sdbayes
+          script:
+          - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          - docker build -t sdbayes .
+          - docker images
+          - docker tag sdbayes $DOCKER_USERNAME/sdbayes
+          - docker push $DOCKER_USERNAME/sdbayes
         - stage: deploy
           name: "Deploy"
           before_script:
