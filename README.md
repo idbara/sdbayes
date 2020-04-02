@@ -1,8 +1,7 @@
 # Sistem Diagnosa Gangguan Kecemasan Tergeneralisasikan dengan metode Bayes
 [![CircleCI](https://circleci.com/gh/awkz/sdbayes/tree/master.svg?style=svg)](https://circleci.com/gh/awkz/sdbayes/tree/master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d722cb86f6bf35a1095b/maintainability)](https://codeclimate.com/github/awkz/sdbayes/maintainability)
-![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg)  
-[![Build Status](https://travis-ci.com/awkz/sdbayes.svg?branch=master)](https://travis-ci.com/awkz/sdbayes)
+![python3.x](https://img.shields.io/badge/python-3.x-brightgreen.svg) [![Build Status](https://travis-ci.com/awkz/sdbayes.svg?branch=master)](https://travis-ci.com/awkz/sdbayes)
 
 
 this project for my skripsi.
@@ -11,6 +10,12 @@ this project for my skripsi.
 
 ```
 $ pip install -r requirements.txt
+```
+
+##### Environment for Production
+
+```
+$ mv example.environment prod.env
 ```
 
 ##### Create the database
