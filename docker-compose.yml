@@ -12,7 +12,7 @@ services:
     environment:
       - FLASK_CONFIG=development
       - SECRET_KEY=INISANGATRAHASIA!
-      - APP_NAME=SD-Bayes
+      - APP_NAME=Dev.
       - POSTGRES_URL=sdbayes-postgres
       - POSTGRES_PASSWORD=development
       - POSTGRES_USER=development
