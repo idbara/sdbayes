@@ -1,4 +1,4 @@
-
+language: python
 env:
     - SERVER_IP_ADDRESS=182.253.108.28
 
@@ -22,6 +22,6 @@ jobs:
             - ssh-add ./deploy_key
             - ssh -i ./deploy_key sysadmin@$SERVER_IP_ADDRESS pwd
           after_success:
-            - ssh -i ./deploy_key sysadmin@$SERVER_IP_ADDRESS docker-compose -f docker-compose.prod.yml up --build
+            - ssh -i ./deploy_key sysadmin@$SERVER_IP_ADDRESS docker-compose -f docker-compose.prod.yml up -d --build
             - echo -e "Done. $SERVER_IP_ADDRESS"
 
