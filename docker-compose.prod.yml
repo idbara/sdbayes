@@ -1,0 +1,121 @@
+version: "2.4"
+services:
+  web:
+    restart: unless-stopped
+    container_name: sdbayes
+    image: sdbayes
+    environment: 
+      - APP_NAME=$APP_NAME
+      - POSTGRES_URL=$POSTGRES_URL
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_DB=$POSTGRES_DB
+      - MAIL_SERVER=$MAIL_SERVER
+      - MAIL_PORT=$MAIL_PORT
+      - MAIL_USE_TLS=$MAIL_USE_TLS
+      - MAIL_USE_SSL=$MAIL_USE_SSL
+      - MAIL_USERNAME=$MAIL_USERNAME
+      - MAIL_PASSWORD=$MAIL_PASSWORD
+      - SECRET_KEY=$SECRET_KEY
+      - FLASK_CONFIG=$FLASK_CONFIG
+    build:
+        context: .
+        dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/app
+    links:
+      - db
+      - redis
+    command: gunicorn --bind 0.0.0.0:5000 manage:app -w 2 --threads 2
+    expose:
+      - 5000
+    depends_on:
+      - db
+      - redis
+    networks:
+      - local
+
+  db:
+    container_name: sdbayes-postgres
+    restart: unless-stopped
+    image: postgres:11-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment: 
+      - POSTGRES_URL=$POSTGRES_URL
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_DB=$POSTGRES_DB
+    networks:
+      - local
+
+  worker:
+    container_name: sdbayes-worker
+    restart: unless-stopped
+    build:
+      context: .
+    environment:
+    - SECRET_KEY=$SECRET_KEY
+    - MAIL_SERVER=$MAIL_SERVER
+    - MAIL_PORT=$MAIL_PORT
+    - MAIL_USE_TLS=$MAIL_USE_TLS
+    - MAIL_USE_SSL=$MAIL_USE_SSL
+    - MAIL_USERNAME=$MAIL_USERNAME
+    - MAIL_PASSWORD=$MAIL_PASSWORD
+    command: python manage.py run_worker
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - redis
+      - db
+    networks:
+      - local
+
+  redis:
+    restart: unless-stopped
+    container_name: "sdbayes-redis"
+    image: "redis:latest"
+    volumes:
+      - redis_data:/var/lib/redis/data/
+    networks:
+      - local
+
+  monitor:
+    build: ./monitor
+    image: sdbayes-monitor
+    container_name: sdbayes-monitor
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - '9181:9181'
+    command: rq-dashboard -H redis
+    depends_on:
+      - redis
+    networks:
+      - local
+
+  
+  # nginx:
+  #   build: ./nginx
+  #   image: nginx:latest
+  #   container_name: sdbayes-webserver
+  #   restart: unless-stopped
+  #   volumes:
+  #     - nginx_data:/etc/nginx
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - web
+  #   networks:
+  #     - local
+
+networks:
+  local:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  nginx_data:
