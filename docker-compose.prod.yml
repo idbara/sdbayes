@@ -81,6 +81,23 @@ services:
     networks:
       - local
 
+
+
+  
+  # nginx:
+  #   build: ./nginx
+  #   image: nginx:latest
+  #   container_name: sdbayes-webserver
+  #   restart: unless-stopped
+  #   volumes:
+  #     - nginx_data:/etc/nginx
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - web
+  #   networks:
+  #     - local
+
 networks:
   local:
     driver: bridge
