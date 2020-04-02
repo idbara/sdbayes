@@ -22,7 +22,7 @@ services:
     #     context: .
     #     dockerfile: Dockerfile
     volumes:
-      - .:/usr/src/app
+      - .:/usr/src/run
     links:
       - db
       - redis
@@ -65,7 +65,7 @@ services:
     - MAIL_PASSWORD=$MAIL_PASSWORD
     command: python manage.py run_worker
     volumes:
-      - .:/usr/src/app
+      - .:/usr/src/run
     depends_on:
       - redis
       - db
