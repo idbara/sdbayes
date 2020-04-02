@@ -1,7 +1,7 @@
 language: python #can be any language, just php for example
 
-services:
-  - docker # required, but travis uses older version of docker :(
+# services:
+#   - docker # required, but travis uses older version of docker :(
 
 # before_install:
 #   - docker build -t bararamadhan/sdbayes .
