@@ -20,6 +20,7 @@ jobs:
             - chmod 600 ./deploy_key
             - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
             - ssh-add ./deploy_key
+            - ssh -i ./deploy_key sysadmin@172.16.4.221
           script:
             - docker-compose -f docker-compose.prod.yml up web
             - echo -e "Done."
