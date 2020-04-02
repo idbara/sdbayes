@@ -3,7 +3,7 @@ services:
   web:
     restart: unless-stopped
     container_name: sdbayes
-    image: bararamadhan/sdbayes
+    image: bararamadhan/sdbayes:latest
     environment: 
       - APP_NAME=$APP_NAME
       - POSTGRES_URL=$POSTGRES_URL
@@ -53,7 +53,7 @@ services:
 
   worker:
     container_name: sdbayes-worker
-    image: bararamadhan/sdbayes
+    image: bararamadhan/sdbayes:latest
     restart: unless-stopped
     environment:
     - SECRET_KEY=$SECRET_KEY
@@ -82,11 +82,10 @@ services:
       - local
 
   monitor:
-    build: ./monitor
-    image: sdbayes-monitor
+    image: bararamadhan/sdbayes:latest
     container_name: sdbayes-monitor
     volumes:
-      - .:/usr/src/app
+      - .:/usr/src/run
     ports:
       - '9181:9181'
     command: rq-dashboard -H redis

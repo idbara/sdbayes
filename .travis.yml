@@ -21,6 +21,6 @@ jobs:
             - ssh-add ./deploy_key
           script:
             - docker rmi sdbayes:latest
-            - docker-compose -f docker-compose.yml up -d --build 
+            - docker-compose -f docker-compose.prod.yml up -d --build 
             - echo -e "Done."
 
