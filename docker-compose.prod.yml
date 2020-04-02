@@ -18,9 +18,9 @@ services:
       - MAIL_PASSWORD=$MAIL_PASSWORD
       - SECRET_KEY=$SECRET_KEY
       - FLASK_CONFIG=$FLASK_CONFIG
-    build:
-        context: .
-        dockerfile: Dockerfile
+    # build:
+    #     context: .
+    #     dockerfile: Dockerfile
     volumes:
       - .:/usr/src/app
     links:
