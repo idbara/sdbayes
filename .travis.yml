@@ -20,4 +20,5 @@ jobs:
             - ssh-add ./deploy_key
           install:
             - docker-compose -f docker-compose.prod.yml up -d --build
+            - echo -e "Done."
 
