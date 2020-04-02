@@ -81,7 +81,22 @@ services:
     networks:
       - local
 
-
+  monitor:
+    image: bararamadhan/sdbayes:latest
+    container_name: sdbayes-monitor
+    volumes:
+      - .:/usr/src/run
+    expose: 
+      - 9181
+    ports:
+      - '9181:9181'
+    command: 
+      - chmod +x /usr/src/docker-entrypoint.sh
+      - rq-dashboard -H redis
+    depends_on:
+      - redis
+    networks:
+      - local
 
   
   # nginx:
