@@ -20,7 +20,7 @@ jobs:
             - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
             - ssh-add ./deploy_key
           script:
-            - docker rmi -f bararamadhan/sdbayes
+            - docker rmi -f sdbayes:latest
             - docker-compose -f docker-compose.yml up -d --build 
             - echo -e "Done."
 
