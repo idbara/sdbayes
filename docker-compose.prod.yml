@@ -3,7 +3,7 @@ services:
   web:
     restart: unless-stopped
     container_name: sdbayes
-    image: sdbayes
+    image: bararamadhan/sdbayes
     environment: 
       - APP_NAME=$APP_NAME
       - POSTGRES_URL=$POSTGRES_URL
