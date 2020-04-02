@@ -1,4 +1,4 @@
-language: python
+
 env:
     - SERVER_IP_ADDRESS=182.253.108.28
 

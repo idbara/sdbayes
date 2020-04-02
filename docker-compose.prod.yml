@@ -22,7 +22,7 @@ services:
     #     context: .
     #     dockerfile: Dockerfile
     volumes:
-      - .:/usr/src/run
+      - sdbayes_data:/usr/src/run
     links:
       - db
       - redis
@@ -65,7 +65,7 @@ services:
     - MAIL_PASSWORD=$MAIL_PASSWORD
     command: python manage.py run_worker
     volumes:
-      - .:/usr/src/run
+      - sdbayes_data:/usr/src/run
     depends_on:
       - redis
       - db
@@ -85,39 +85,23 @@ services:
     image: bararamadhan/sdbayes:latest
     container_name: sdbayes-monitor
     volumes:
-      - .:/usr/src/run
+      - sdbayes_data:/usr/src/run
     expose: 
       - 9181
     ports:
       - '9181:9181'
     command: 
-      - chmod +x /usr/src/docker-entrypoint.sh
       - rq-dashboard -H redis
     depends_on:
       - redis
     networks:
       - local
 
-  
-  # nginx:
-  #   build: ./nginx
-  #   image: nginx:latest
-  #   container_name: sdbayes-webserver
-  #   restart: unless-stopped
-  #   volumes:
-  #     - nginx_data:/etc/nginx
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     - web
-  #   networks:
-  #     - local
-
 networks:
   local:
     driver: bridge
 
 volumes:
+  sdbayes_data:
   postgres_data:
   redis_data:
-  nginx_data:
