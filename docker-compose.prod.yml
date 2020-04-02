@@ -53,9 +53,8 @@ services:
 
   worker:
     container_name: sdbayes-worker
+    image: bararamadhan/sdbayes
     restart: unless-stopped
-    build:
-      context: .
     environment:
     - SECRET_KEY=$SECRET_KEY
     - MAIL_SERVER=$MAIL_SERVER
