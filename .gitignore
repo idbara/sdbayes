@@ -16,3 +16,4 @@ dump.rdb
 .vscode
 __pycache__/
 migrations
+deploy_key
