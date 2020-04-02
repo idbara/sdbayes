@@ -4,7 +4,8 @@ env:
 
 jobs:
     include:
-        - stage: build docker image
+        - stage: build
+          name: "Build image and push to docker hub"
           script:
           - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
           - docker build -t sdbayes .
@@ -12,7 +13,7 @@ jobs:
           - docker tag sdbayes $DOCKER_USERNAME/sdbayes
           - docker push $DOCKER_USERNAME/sdbayes
         - stage: deploy
-          name: "Deploy"
+          name: "Deploy to Production"
           before_script:
             - openssl aes-256-cbc -K $encrypted_dfdcfd5172af_key -iv $encrypted_dfdcfd5172af_iv -in deploy_key.enc -out ./deploy_key -d
             - eval "$(ssh-agent -s)"
