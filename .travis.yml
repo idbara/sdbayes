@@ -26,8 +26,7 @@ jobs:
             - ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS mkdir
             - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/ $SSH_USER@$SERVER_IP_ADDRESS:/sdbayes/
             - ssh -i ./deploy_key sysadmin@$SERVER_IP_ADDRESS docker-compose -f sdbayes/docker-compose.prod.yml up -d --build
-            on:
-                branch: master
+            
         #   script:
         #     - ssh -i ./deploy_key sysadmin@$SERVER_IP_ADDRESS docker-compose -f docker-compose.prod.yml up -d --build
         #     - echo -e "Done. $SERVER_IP_ADDRESS"
