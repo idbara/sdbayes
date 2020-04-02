@@ -38,8 +38,6 @@ services:
     container_name: sdbayes-postgres
     restart: unless-stopped
     image: postgres:11-alpine
-    ports:
-      - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment: 
