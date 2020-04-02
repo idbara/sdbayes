@@ -4,14 +4,14 @@ env:
 
 jobs:
     include:
-        - stage: build
-          name: "Build image and push to docker hub"
-          script:
-          - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-          - docker build -t sdbayes .
-          - docker images
-          - docker tag sdbayes $DOCKER_USERNAME/sdbayes
-          - docker push $DOCKER_USERNAME/sdbayes
+        # - stage: build
+        #   name: "Build image and push to docker hub"
+        #   script:
+        #   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        #   - docker build -t sdbayes .
+        #   - docker images
+        #   - docker tag sdbayes $DOCKER_USERNAME/sdbayes
+        #   - docker push $DOCKER_USERNAME/sdbayes
         - stage: deploy
           name: "Deploy to Production"
           before_script:
@@ -21,6 +21,6 @@ jobs:
             - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
             - ssh-add ./deploy_key
           script:
-            - docker-compose -f docker-compose.prod.yml up web -d
+            - docker-compose -f docker-compose.prod.yml up web
             - echo -e "Done."
 
