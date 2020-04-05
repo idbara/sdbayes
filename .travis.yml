@@ -20,8 +20,8 @@ jobs:
     - ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS docker-compose -f $DIR/docker-compose.prod.yml
       up -d --build
 before_install:
-- openssl aes-256-cbc -K $encrypted_67820c58a10c_key -iv $encrypted_67820c58a10c_iv
-  -in prod.env.enc -out ./prod.env -d
+- openssl aes-256-cbc -K $encrypted_117718da09e6_key -iv $encrypted_117718da09e6_iv
+  -in prod.env.enc -out prod.env -d
 - openssl aes-256-cbc -K $encrypted_dfdcfd5172af_key -iv $encrypted_dfdcfd5172af_iv
   -in deploy_key.enc -out ./deploy_key -d
 - eval "$(ssh-agent -s)"
