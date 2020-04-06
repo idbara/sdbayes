@@ -5,15 +5,14 @@ import subprocess
 
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Shell
+from flask_assets import ManageAssets
 from redis import Redis
 from rq import Connection, Queue, Worker
 
 from app import create_app, db
 from app.models import Role, User
-from app.commands.import_core import (import_pilihan,
-                                        import_label,
-                                        import_roles,
-                                        import_datatraining)
+from app.commands.import_core import (import_pilihan, import_label,
+                                      import_roles, import_datatraining)
 from config import Config
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
@@ -27,8 +26,10 @@ def make_shell_context():
 
 manager.add_command('shell', Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
-
+manager.add_command("assets", ManageAssets())
 """Run Import Core Data Using Commands"""
+
+
 @manager.command
 def import_dev():
     print("Preparing import core data")
@@ -49,7 +50,10 @@ def import_dev():
     setup_general()
     print("setup has done")
 
+
 """Run Import Core Data Using Commands"""
+
+
 @manager.command
 def import_core_data():
     print("Preparing import pilihan data")
@@ -70,7 +74,10 @@ def import_core_data():
     import_roles()
     print("Import roles data has done")
 
+
 """Run Import Data Training Using Commands"""
+
+
 @manager.command
 def import_data_training():
     print("Preparing import data training data")
@@ -78,6 +85,7 @@ def import_data_training():
     time.sleep(2)
     import_datatraining()
     print("Import data training has done")
+
 
 @manager.command
 def test():
@@ -99,13 +107,12 @@ def recreate_db():
     db.session.commit()
 
 
-@manager.option(
-    '-n',
-    '--number-users',
-    default=10,
-    type=int,
-    help='Number of each model type to create',
-    dest='number_users')
+@manager.option('-n',
+                '--number-users',
+                default=10,
+                type=int,
+                help='Number of each model type to create',
+                dest='number_users')
 def add_fake_data(number_users):
     """
     Adds fake data to the database.
@@ -132,24 +139,22 @@ def setup_general():
     admin_query = Role.query.filter_by(name='Administrator')
     if admin_query.first() is not None:
         if User.query.filter_by(email=Config.ADMIN_EMAIL).first() is None:
-            user = User(
-                first_name='Admin',
-                last_name='Account',
-                password=Config.ADMIN_PASSWORD,
-                confirmed=True,
-                email=Config.ADMIN_EMAIL)
+            user = User(first_name='Admin',
+                        last_name='Account',
+                        password=Config.ADMIN_PASSWORD,
+                        confirmed=True,
+                        email=Config.ADMIN_EMAIL)
             db.session.add(user)
             db.session.commit()
             print('Added administrator {}'.format(user.full_name()))
     pasien_query = Role.query.filter_by(name='Pasien')
     if pasien_query.first() is not None:
         if User.query.filter_by(email='pasien@bara.my.id').first() is None:
-            pasien = User(
-                first_name='Pasien',
-                last_name='User',
-                password=Config.ADMIN_PASSWORD,
-                confirmed=True,
-                email='pasien@bara.my.id')
+            pasien = User(first_name='Pasien',
+                          last_name='User',
+                          password=Config.ADMIN_PASSWORD,
+                          confirmed=True,
+                          email='pasien@bara.my.id')
             db.session.add(pasien)
             db.session.commit()
             print('Added pasien {}'.format(pasien.full_name()))
