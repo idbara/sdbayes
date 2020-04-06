@@ -1,10 +1,12 @@
 from flask import current_app
 from flask_login import AnonymousUserMixin, UserMixin
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import BadSignature, SignatureExpired
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from .. import db, login_manager
+
+
 class Pilihan(db.Model):
     __tablename__ = 'pilihan'
     id = db.Column(db.Integer, primary_key=True)
@@ -13,6 +15,7 @@ class Pilihan(db.Model):
     def __repr__(self):
         return '<Pilihan {}>'.format(self.item)
 
+
 class Label(db.Model):
     __tablename__ = 'label'
     id = db.Column(db.Integer, primary_key=True)
@@ -20,6 +23,7 @@ class Label(db.Model):
 
     def __repr__(self):
         return '<Label {}>'.format(self.item)
+
 
 class Training(db.Model):
     __tablename__ = 'datatraining'

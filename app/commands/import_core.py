@@ -1,8 +1,10 @@
-from app import db
 import json
 import os
-from app.models import (Pilihan,Label,Role,User,Training)
+
 from sqlalchemy import exc
+
+from app import db
+from app.models import Label, Pilihan, Role, Training, User
 
 
 def import_pilihan():
@@ -20,6 +22,7 @@ def import_pilihan():
             print('Data pilihan {} already exists'.format(data.item))
             db.session.rollback()
 
+
 def import_label():
     """Import Data Label to Database"""
     file = os.path.abspath('app/resources') + "/label.json"
@@ -35,6 +38,7 @@ def import_label():
             print('Data label {} already exists'.format(data.item))
             db.session.rollback()
 
+
 def import_roles():
     """Import Data Role to Database"""
     file = os.path.abspath('app/resources') + "/roles.json"
@@ -42,13 +46,18 @@ def import_roles():
     json_obj = json.loads(json_data)
     for row in json_obj:
         try:
-            data = Role(id=row['id'], name=row['name'],index=row['index'],default=row['default'],permissions=row['permissions'])
+            data = Role(id=row['id'],
+                        name=row['name'],
+                        index=row['index'],
+                        default=row['default'],
+                        permissions=row['permissions'])
             db.session.add(data)
             db.session.commit()
             print('Import data role {} done.'.format(data.name))
         except exc.IntegrityError:
             print('Data role {} already exists'.format(data.name))
             db.session.rollback()
+
 
 def import_datatraining():
     """Import Data Data Training to Database"""
@@ -57,7 +66,15 @@ def import_datatraining():
     json_obj = json.loads(json_data)
     for row in json_obj:
         try:
-            data = Training(name=row['name'],k1=row['k1'],k2=row['k2'],k3=row['k3'],k4=row['k4'],k5=row['k5'],k6=row['k6'],k7=row['k7'],c=row['c'])
+            data = Training(name=row['name'],
+                            k1=row['k1'],
+                            k2=row['k2'],
+                            k3=row['k3'],
+                            k4=row['k4'],
+                            k5=row['k5'],
+                            k6=row['k6'],
+                            k7=row['k7'],
+                            c=row['c'])
             db.session.add(data)
             db.session.commit()
             print('Import data data training {} done.'.format(data.name))

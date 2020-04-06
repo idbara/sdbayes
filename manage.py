@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 import os
-import time
 import subprocess
+import time
 
+from flask_assets import ManageAssets
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Shell
-from flask_assets import ManageAssets
 from redis import Redis
 from rq import Connection, Queue, Worker
 
 from app import create_app, db
+from app.commands.import_core import (import_datatraining, import_label,
+                                      import_pilihan, import_roles)
 from app.models import Role, User
-from app.commands.import_core import (import_pilihan, import_label,
-                                      import_roles, import_datatraining)
 from config import Config
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')

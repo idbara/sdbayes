@@ -1,13 +1,8 @@
 import os
 import sys
+import urllib.parse
 
 from raygun4py.middleware import flask as flask_raygun
-
-PYTHON_VERSION = sys.version_info[0]
-if PYTHON_VERSION == 3:
-    import urllib.parse
-else:
-    import urlparse
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -21,7 +16,7 @@ if os.path.exists('config.env'):
 
 class Config:
     APP_NAME = os.environ.get('APP_NAME', 'SDBAYES')
-    
+
     if os.environ.get('SECRET_KEY'):
         SECRET_KEY = os.environ.get('SECRET_KEY')
     else:
@@ -51,11 +46,10 @@ class Config:
 
     # Admin account
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'password')
-    ADMIN_EMAIL = os.environ.get(
-        'ADMIN_EMAIL', 'admin@bara.my.id')
+    ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@bara.my.id')
     EMAIL_SUBJECT_PREFIX = '[{}]'.format(APP_NAME)
-    EMAIL_SENDER = '{app_name} Admin <{email}>'.format(
-        app_name=APP_NAME, email=MAIL_USERNAME)
+    EMAIL_SENDER = '{app_name} Admin <{email}>'.format(app_name=APP_NAME,
+                                                       email=MAIL_USERNAME)
 
     # REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://127.0.0.1:6379/0')
     REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://sdbayes-redis:6379/0')
@@ -63,12 +57,8 @@ class Config:
     # RAYGUN_APIKEY = os.environ.get('RAYGUN_APIKEY')
 
     # Parse the REDIS_URL to set RQ config variables
-    if PYTHON_VERSION == 3:
-        urllib.parse.uses_netloc.append('redis')
-        url = urllib.parse.urlparse(REDIS_URL)
-    else:
-        urlparse.uses_netloc.append('redis')
-        url = urlparse.urlparse(REDIS_URL)
+    urllib.parse.uses_netloc.append('redis')
+    url = urllib.parse.urlparse(REDIS_URL)
 
     RQ_DEFAULT_HOST = url.hostname
     RQ_DEFAULT_PORT = url.port

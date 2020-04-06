@@ -1,16 +1,18 @@
-from flask import (Blueprint, abort, flash, redirect, render_template, request,
-                   url_for, jsonify)
+import json
+
+from flask import (Blueprint, abort, flash, jsonify, redirect, render_template,
+                   request, url_for)
 from flask_login import current_user, login_required
 from flask_rq import get_queue
 
 from app import db
-from app.diagnosa.forms import (DiagnosaForm)
 from app.decorators import admin_required, pasien_required
+from app.diagnosa.bayes import (bayes, getAtribut, getC, getDataTraining,
+                                getJumlahC, getJumlahData, getJumlahKriteria,
+                                likehood)
+from app.diagnosa.forms import DiagnosaForm
 from app.email import send_email
-from app.models import Role, User, Pasien, Label, Pilihan, Diagnosa, Training
-
-from app.diagnosa.bayes import getDataTraining, getJumlahData, getJumlahKriteria, getJumlahC, bayes, getAtribut, getC, likehood
-import json
+from app.models import Diagnosa, Label, Pasien, Pilihan, Role, Training, User
 
 diagnosa = Blueprint('diagnosa', __name__)
 

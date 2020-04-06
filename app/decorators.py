@@ -8,7 +8,6 @@ from app.models import Permission
 
 def permission_required(permission):
     """Restrict a view to users with the given permission."""
-
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -23,6 +22,7 @@ def permission_required(permission):
 
 def admin_required(f):
     return permission_required(Permission.ADMINISTER)(f)
+
 
 def pasien_required(f):
     return permission_required(Permission.PASIEN)(f)
