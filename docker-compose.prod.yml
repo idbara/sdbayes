@@ -14,8 +14,6 @@ services:
     command: gunicorn --bind 0.0.0.0:5001 manage:app -w 2 --threads 2
     ports:
       - 5001:5001
-    expose:
-      - 5001
     depends_on:
       - db
       - redis

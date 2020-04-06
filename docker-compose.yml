@@ -8,7 +8,7 @@ services:
     build:
       context: .
     volumes:
-        - .:/usr/src/app
+      - .:/usr/src/app
     environment:
       - FLASK_CONFIG=development
       - SECRET_KEY=INISANGATRAHASIA!
@@ -38,14 +38,14 @@ services:
     container_name: sdbayes-postgres
     image: postgres:11-alpine
     volumes:
-        - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_URL=sdbayes-postgres
       - POSTGRES_PASSWORD=development
       - POSTGRES_USER=development
       - POSTGRES_DB=sdbayes-development
       - TZ=Asia/Jakarta
-    ports: 
+    ports:
       - 5432:5432
     networks:
       - local
@@ -68,7 +68,6 @@ services:
       - db
     networks:
       - local
-    
 
   redis:
     restart: always
@@ -86,7 +85,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - '9181:9181'
+      - "9181:9181"
     command: rq-dashboard -H redis
     depends_on:
       - redis
