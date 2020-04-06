@@ -28,7 +28,7 @@ RUN pip install --upgrade pip && pip install --default-timeout=100 future && \
 
 # set working directory
 COPY . /usr/src/run
-RUN chmod +x /usr/src/run/entrypoint.sh
+RUN chmod +x /usr/src/run/entrypoint.prod.sh
 
 # run entrypoint.sh
-ENTRYPOINT ["/usr/src/run/entrypoint.sh"]
+ENTRYPOINT ["/usr/src/run/entrypoint.prod.sh"]

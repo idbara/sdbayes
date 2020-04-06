@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ "$POSTGRES_DB" = "sdbayes-development" ]
+if [ "$POSTGRES_DB" = "sdbayes-postgres" ]
 then
     echo "Waiting for postgres..."
 
