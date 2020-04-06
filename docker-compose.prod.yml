@@ -6,7 +6,7 @@ services:
     image: bararamadhan/sdbayes:latest
     build: 
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     env_file:
       - prod.env
     volumes:
