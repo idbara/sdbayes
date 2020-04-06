@@ -4,6 +4,9 @@ services:
     restart: unless-stopped
     container_name: sdbayes
     image: bararamadhan/sdbayes:latest
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
     env_file:
       - prod.env
     volumes:
@@ -34,6 +37,8 @@ services:
   worker:
     container_name: sdbayes-worker
     image: bararamadhan/sdbayes:latest
+    build: 
+      context: .
     restart: unless-stopped
     env_file:
       - prod.env

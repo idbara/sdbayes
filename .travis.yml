@@ -15,11 +15,7 @@ jobs:
     name: Deploy to Production
     script:
     - ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS mkdir -p $DIR
-    - scp -r docker-compose.prod.yml $SSH_USER@$SERVER_IP_ADDRESS:$DIR
-    - scp -r prod.env $SSH_USER@$SERVER_IP_ADDRESS:$DIR
-    - ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS docker volume rm sdbayes_sdbayes_data
-    - ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS docker-compose -f $DIR/docker-compose.prod.yml rm -f
-    - ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS docker-compose -f $DIR/docker-compose.prod.yml pull
+    - rsync -r --delete-after --quiet . $SSH_USER@$SERVER_IP_ADDRESS:$DIR
     - ssh -i ./deploy_key $SSH_USER@$SERVER_IP_ADDRESS docker-compose -f $DIR/docker-compose.prod.yml up --build -d
 
 before_install:
