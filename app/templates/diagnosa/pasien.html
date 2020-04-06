@@ -91,22 +91,22 @@
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Tingkat Kecemasan', '%'],
+            ['Sedikit atau tidak ada', {{ hasildiagnosa.sedikitatautidakada|safe }}],
+            ['Ringan', {{ hasildiagnosa.ringan|safe }}],
+            ['Sedang', {{ hasildiagnosa.sedang|safe }}],
+            ['Parah', {{ hasildiagnosa.parah|safe }}]
+        ]);
 
-    var data = google.visualization.arrayToDataTable([
-        ['Tingkat Kecemasan', '%'],
-        ['Sedikit atau tidak ada',     0.975833],
-        ['Ringan',      0.0205057],
-        ['Sedang',  0.0036142],
-        ['Parah', 0.0000472452]
-    ]);
+        var options = {
+            title: 'Hasil Diagnosa',
+            colors: ['#3366CC', '#109618', '#EF6C00', '#DC3912']
+        };
 
-    var options = {
-        title: 'Hasil Diagnosa'
-    };
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
-    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-    chart.draw(data, options);
+        chart.draw(data, options);
     }
     </script>
 {% endblock %}
