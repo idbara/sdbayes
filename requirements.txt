@@ -27,12 +27,16 @@ jsmin==2.2.2
 jsonpickle==1.2
 Mako==1.1.0
 MarkupSafe==1.1.1
+numpy==1.19.4
 packaging==19.1
+pandas==1.1.4
 pipupgrade==1.5.1
+psycopg2==2.8.3
 pyparsing==2.4.2
 python-dateutil==2.8.0
 python-dotenv==0.10.3
 python-editor==1.0.4
+pytz==2020.4
 raygun4py==4.3.0
 redis==3.3.8
 requests==2.22.0
@@ -44,4 +48,3 @@ urllib3==1.25.3
 webassets==0.12.1
 Werkzeug==0.15.5
 WTForms==2.2.1
-psycopg2==2.8.3

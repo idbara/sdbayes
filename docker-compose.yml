@@ -1,10 +1,10 @@
 version: "3.7"
 
 services:
-  web:
+  sdbayes_web:
     restart: always
     container_name: sdbayes
-    image: web
+    image: sdbayes_web
     build:
       context: .
     volumes:
@@ -33,6 +33,29 @@ services:
     networks:
       - local
 
+
+  worker:
+    restart: always
+    image: sdbayes_web
+    build:
+      context: .
+    container_name: sdbayes-worker
+    volumes:
+      - .:/app
+    environment:
+      - SECRET_KEY=INISANGATRAHASIA!
+      - MAIL_SERVER=smtp.gmail.com
+      - MAIL_USERNAME=apps@bara.my.id
+      - MAIL_PASSWORD=Alhamdulillah
+      - TZ=Asia/Jakarta
+    command: python manage.py run_worker
+    depends_on:
+      - redis
+      - db
+    networks:
+      - local
+
+
   db:
     restart: always
     container_name: sdbayes-postgres
@@ -47,25 +70,6 @@ services:
       - TZ=Asia/Jakarta
     ports:
       - 5432:5432
-    networks:
-      - local
-
-  worker:
-    restart: always
-    image: web
-    container_name: sdbayes-worker
-    volumes:
-      - .:/app
-    environment:
-      - SECRET_KEY=INISANGATRAHASIA!
-      - MAIL_SERVER=smtp.gmail.com
-      - MAIL_USERNAME=apps@bara.my.id
-      - MAIL_PASSWORD=Alhamdulillah
-      - TZ=Asia/Jakarta
-    command: python manage.py run_worker
-    depends_on:
-      - redis
-      - db
     networks:
       - local
 
