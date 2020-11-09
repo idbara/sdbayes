@@ -1,4 +1,4 @@
-import json
+import pandas as pd
 
 from flask import (Blueprint, abort, flash, jsonify, redirect, render_template,
                    request, url_for)
@@ -43,6 +43,9 @@ def index():
 def detail(id):
     """Detail data diagnosa."""
     trainings = Training.query.all()
+    # df = pd.read_sql(Training.query.all(). db.engine)
+    print('asdsda')
+    # print(df)
     pilihans = Pilihan.query.all()
     labels = Label.query.all()
     diagnosa = Pasien.query.filter_by(id=id).join(
