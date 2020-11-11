@@ -1,10 +1,5 @@
-from flask import current_app
-from flask_login import AnonymousUserMixin, UserMixin
-from itsdangerous import BadSignature, SignatureExpired
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from werkzeug.security import check_password_hash, generate_password_hash
-
-from .. import db, login_manager
+from sqlalchemy.ext.hybrid import hybrid_property
+from .. import db
 
 
 class Pasien(db.Model):
@@ -18,6 +13,12 @@ class Pasien(db.Model):
     k5 = db.Column(db.Integer, db.ForeignKey('pilihan.id'))
     k6 = db.Column(db.Integer, db.ForeignKey('pilihan.id'))
     k7 = db.Column(db.Integer, db.ForeignKey('pilihan.id'))
+
+    akun = db.relationship("User", backref="akun")
+
+    @hybrid_property
+    def name(self):
+        return self.akun.full_name()
 
     def __repr__(self):
         return '<Pasien {}>'.format(self.user)

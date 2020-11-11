@@ -1,11 +1,20 @@
 from _operator import itemgetter
-from app.models import Pasien, Training
-
-# from app import db
-# from app.models.diagnosa import Diagnosa
+from app.models import Pasien
+from app import db
+import pandas as pd
 
 
 def getAtribut(kriteria):
+    datatraining = pd.read_sql_table('datatraining', db.session.bind)
+
+    def getJumlahKriteria(kriteria, y, z):
+        jmlkriteria = datatraining[(datatraining[kriteria] == y) & (datatraining['c'] == z)]
+        return len(jmlkriteria.index)
+
+    def getJumlahC(z):
+        jmlC = datatraining[datatraining['c'] == z]
+        return len(jmlC.index)
+
     jk1c1 = getJumlahKriteria(kriteria, 1, 1)
     jk1c2 = getJumlahKriteria(kriteria, 1, 2)
     jk1c3 = getJumlahKriteria(kriteria, 1, 3)
@@ -46,6 +55,11 @@ def getAtribut(kriteria):
 
 
 def getC():
+    datatraining = pd.read_sql_table('datatraining', db.session.bind)
+
+    def getJumlahC(z):
+        jmlC = datatraining[datatraining['c'] == z]
+        return len(jmlC.index)
     SumPCi = getJumlahC(1) + getJumlahC(2) + getJumlahC(3) + getJumlahC(4)
     jc1 = getJumlahC(1)
     jc2 = getJumlahC(2)
@@ -61,6 +75,15 @@ def getC():
 
 def likehood(id_pasien):
     pasien = Pasien.query.filter_by(id=id_pasien).first()
+    datatraining = pd.read_sql_table('datatraining', db.session.bind)
+
+    def getJumlahKriteria(kriteria, y, z):
+        jmlkriteria = datatraining[(datatraining[kriteria] == y) & (datatraining['c'] == z)]
+        return len(jmlkriteria.index)
+
+    def getJumlahC(z):
+        jmlC = datatraining[datatraining['c'] == z]
+        return len(jmlC.index)
 
     # P(Ci)
     SumPCi = getJumlahC(1) + getJumlahC(2) + getJumlahC(3) + getJumlahC(4)
@@ -135,6 +158,15 @@ def likehood(id_pasien):
 # function bayes
 def bayes(id_pasien):
     pasien = Pasien.query.filter_by(id=id_pasien).first()
+    datatraining = pd.read_sql_table('datatraining', db.session.bind)
+
+    def getJumlahKriteria(kriteria, y, z):
+        jmlkriteria = datatraining[(datatraining[kriteria] == y) & (datatraining['c'] == z)]
+        return len(jmlkriteria.index)
+
+    def getJumlahC(z):
+        jmlC = datatraining[datatraining['c'] == z]
+        return len(jmlC.index)
 
     # P(Ci)
     SumPCi = getJumlahC(1) + getJumlahC(2) + getJumlahC(3) + getJumlahC(4)
@@ -198,45 +230,24 @@ def bayes(id_pasien):
     PC3 = C3 / SumC
     PC4 = C4 / SumC
 
-    # tuple
-    tup = (("Sedikit atau tidak ada", PC1), ("Ringan", PC2), ("Sedang", PC3),
+    result = (("Sedikit atau tidak ada", PC1), ("Ringan", PC2), ("Sedang", PC3),
            ("Parah", PC4))
 
-    # sort
-    # sorted(student_tuples, key=itemgetter(2), reverse=True)
-    stup = sorted(tup, key=itemgetter(1), reverse=True)
+    sortResult = sorted(result, key=itemgetter(1), reverse=True)
 
     # tingkat kecemasan
-    tk = stup[0][0]
-    result = (pasien.user, tk, (tup))
-
+    tk = sortResult[0][0]
+    result = (pasien.user, tk, (result))
     return result
 
 
-def getDataTraining():
-    return Training.query.all()
-
-
-def getJumlahData():
-    return Training.query.count()
-
-
 def getJumlahKriteria(kriteria, y, z):
-    if (kriteria == 'k1'):
-        return Training.query.filter_by(k1=y).filter_by(c=z).count()
-    if (kriteria == 'k2'):
-        return Training.query.filter_by(k2=y).filter_by(c=z).count()
-    if (kriteria == 'k3'):
-        return Training.query.filter_by(k3=y).filter_by(c=z).count()
-    if (kriteria == 'k4'):
-        return Training.query.filter_by(k4=y).filter_by(c=z).count()
-    if (kriteria == 'k5'):
-        return Training.query.filter_by(k5=y).filter_by(c=z).count()
-    if (kriteria == 'k6'):
-        return Training.query.filter_by(k6=y).filter_by(c=z).count()
-    if (kriteria == 'k7'):
-        return Training.query.filter_by(k7=y).filter_by(c=z).count()
+    datatraining = pd.read_sql_table('datatraining', db.session.bind)
+    jmlkriteria = datatraining[(datatraining[kriteria] == y) & (datatraining['c'] == z)]
+    return len(jmlkriteria.index)
 
 
 def getJumlahC(z):
-    return Training.query.filter_by(c=z).count()
+    datatraining = pd.read_sql_table('datatraining', db.session.bind)
+    jmlC = datatraining[datatraining['c'] == z]
+    return len(jmlC.index)
