@@ -2,7 +2,10 @@ FROM python:3.7-buster
 LABEL maintainer="Bara Ramadhan bararamadhan@gmail.com"
 
 # set work directory
-WORKDIR /usr/src/run
+WORKDIR /usr/src/app
+
+# set working directory
+COPY . /usr/src/app
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -16,9 +19,8 @@ RUN apt-get update && apt-get install -y postgresql-client netcat-openbsd gcc li
 RUN pip install --upgrade pip && pip install --default-timeout=100 future && \
     pip install -r requirements.txt
 
-# set working directory
-COPY . /usr/src/run
-RUN chmod +x /usr/src/run/entrypoint.sh
+
+RUN chmod +x /usr/src/app/entrypoint.sh
 
 # run entrypoint.sh
-ENTRYPOINT ["/usr/src/run/entrypoint.sh"]
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
