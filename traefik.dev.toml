@@ -1,0 +1,14 @@
+[entryPoints.sdbayes]
+    address = ":80"
+
+[api]
+insecure = true
+
+[log]
+level = "DEBUG"
+
+[accessLog]
+
+[providers]
+  [providers.docker]
+    exposedByDefault = false

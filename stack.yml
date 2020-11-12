@@ -1,0 +1,99 @@
+version: "3.3"
+services:
+  traefik:
+    image: traefik
+    command: --web \
+      --docker \
+      --docker.swarmmode \
+      --docker.domain=local \
+      --docker.watch \
+      --logLevel=DEBUG
+    networks:
+      - traefik-net
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - "./traefik.dev.toml:/etc/traefik/traefik.toml"
+    deploy:
+      placement:
+        constraints: [node.role==manager]
+
+
+  sdbayes:
+    image: bararamadhan/sdbayes:latest
+    command: python manage.py runserver -h 0.0.0.0
+    networks:
+      - traefik-net
+    depends_on:
+      - db
+    environment:
+      - FLASK_CONFIG=development
+      - SECRET_KEY=INISANGATRAHASIA!
+      - APP_NAME=Dev.
+      - POSTGRES_URL=sdbayes-postgres
+      - POSTGRES_PASSWORD=development
+      - POSTGRES_USER=development
+      - POSTGRES_DB=sdbayes-development
+      - MAIL_SERVER=smtp.gmail.com
+      - MAIL_USERNAME=apps@bara.my.id
+      - MAIL_PASSWORD=Alhamdulillah
+      - TZ=Asia/Jakarta
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.sdbayes.rule=Host(`sdbayes.local`)"
+  worker:
+    image: bararamadhan/sdbayes:latest
+    command: python manage.py run_worker
+    depends_on:
+      - redis
+      - db
+    networks:
+      - traefik-net
+    deploy:
+      replicas: 1
+    environment:
+      - SECRET_KEY=INISANGATRAHASIA!
+      - MAIL_SERVER=smtp.gmail.com
+      - MAIL_USERNAME=apps@bara.my.id
+      - MAIL_PASSWORD=Alhamdulillah
+      - TZ=Asia/Jakarta
+      - REDISTOGO_URL="redis://redis:6379/0"
+  db:
+    image: postgres:11-alpine
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data/"
+    networks:
+      - traefik-net
+    deploy:
+      replicas: 1
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_URL=sdbayes-postgres
+      - POSTGRES_PASSWORD=development
+      - POSTGRES_USER=development
+      - POSTGRES_DB=sdbayes-development
+      - TZ=Asia/Jakarta
+
+  redis:
+    image: redis:5.0
+    volumes:
+      - "redis_data:/var/lib/redis/data/"
+    networks:
+      - traefik-net
+    deploy:
+      replicas: 1
+    ports:
+      - "6379:6379"
+
+
+networks:
+  traefik-net:
+
+volumes:
+  postgres_data:
+  redis_data:
