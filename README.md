@@ -32,17 +32,9 @@ docker-compose -f traefik-compose.yml up -d
 ```
 Check by visting *https://traefik.docker.localhost/dashboard/*.
 
-Next is to modify any configuratioin in `wordpress-compose.yml` and then run:
+Next is to modify any configuratioin in `sdbayes-compose.yml` and then run:
 ```
-docker-compose -f wordpress-compose.yml up
-```
-
-For creating a new wordpress instance, simply copy `wordpress-compose.yml` and `.env`.
-```
-mkdir new-wp-project && \
-cd $_  && \
-cp ../wordpress-traefik-docker-swarm/wordpress-compose.yml . && \
-cp ../wordpress-traefik-docker-swarm/.env .
+docker-compose -f sdbayes-compose.yml up
 ```
 
 **Having problems?** 
