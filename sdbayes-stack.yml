@@ -8,7 +8,7 @@ services:
       - SECRET_KEY=INISANGATRAHASIA!
       - APP_NAME=SDBayes
       - POSTGRES_URL=sdbayes-postgres
-      - POSTGRES_PASSWORD-production
+      - POSTGRES_PASSWORD=production
       - POSTGRES_USER=production
       - POSTGRES_DB=sdbayes-production
       - MAIL_SERVER=smtp.gmail.com
@@ -81,8 +81,8 @@ services:
           - node.role==manager
     environment:
       - POSTGRES_URL=sdbayes-postgres
-      - POSTGRES_PASSWORD-production
-      - POSTGRES_USER-production
+      - POSTGRES_PASSWORD=production
+      - POSTGRES_USER=production
       - POSTGRES_DB=sdbayes-production
       - TZ=Asia/Jakarta
     networks:
