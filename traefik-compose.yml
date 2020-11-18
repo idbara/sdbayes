@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik:1.7.12
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+      - type: bind
+        source: ./config-staging.toml
+        target: /traefik.toml
+      - type: bind
+        source: ./certs
+        target: /sslcerts
+    ports:
+      - 80:80
+      - 443:443
+    labels:
+      - "traefik.port=8080"
+      - "traefik.frontend.entryPoints=https"
+      - "traefik.enable=true"
+      - "traefik.weight=10"
+      - "traefik.frontend.rule=Host:traefik.docker.localhost"
+      - "traefik.backend=traefik-localhost"
+    networks:
+      - sdbayes_network
+
+# Network should be created beforehand and set as external.
+# This will used across wordpress instance.
+networks:
+  sdbayes_network:
+    name: sdbayes-local
+    driver: bridge
+    external: true

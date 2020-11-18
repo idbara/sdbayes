@@ -1,0 +1,132 @@
+version: "3.7"
+
+services:
+  sdbayes_web:
+    image: bararamadhan/sdbayes:latest
+    environment:
+      - FLASK_CONFIG=production
+      - SECRET_KEY=INISANGATRAHASIA!
+      - APP_NAME=SDBayes
+      - POSTGRES_URL=sdbayes-postgres
+      - POSTGRES_PASSWORD-production
+      - POSTGRES_USER=production
+      - POSTGRES_DB=sdbayes-production
+      - MAIL_SERVER=smtp.gmail.com
+      - MAIL_USERNAME=apps@bara.my.id
+      - MAIL_PASSWORD=Alhamdulillah
+      - TZ=Asia/Jakarta
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 10
+      placement:
+        constraints:
+          - node.role==manager # Change its role to worker if required
+      mode: replicated
+      replicas: 1 # Scale as needed
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.sdbayes-http.rule=Host(`${DOMAIN?Variable not set}`)
+        - traefik.http.routers.sdbayes-http.entrypoints=http
+        - traefik.http.routers.sdbayes-http.middlewares=https-redirect
+        - traefik.http.routers.sdbayes-https.rule=Host(`${DOMAIN?Variable not set}`)
+        - traefik.http.routers.sdbayes-https.entrypoints=https
+        - traefik.http.routers.sdbayes-https.tls=true
+        - traefik.http.routers.sdbayes-https.tls.certresolver=le
+        - traefik.http.services.sdbayes.loadbalancer.server.port=5000
+    expose:
+      - 5000
+    command: python manage.py runserver -h 0.0.0.0
+    depends_on:
+      - sdbayes-postgres
+      - sdbayes-redis
+      - worker
+    networks:
+      - sdbayes_network
+      - traefik-public
+
+  sdbayes-worker:
+    image: bararamadhan/sdbayes:latest
+    environment:
+      - SECRET_KEY=INISANGATRAHASIA!
+      - MAIL_SERVER=smtp.gmail.com
+      - MAIL_USERNAME=apps@bara.my.id
+      - MAIL_PASSWORD=Alhamdulillah
+      - TZ=Asia/Jakarta
+    deploy:
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role==manager
+    command: python manage.py run_worker
+    depends_on:
+      - sdbayes-redis
+      - sdbayes-postgres
+    networks:
+      - sdbayes_network
+
+  sdbayes-postgres:
+    restart: always
+    image: postgres:11-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    deploy:
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role==manager
+    environment:
+      - POSTGRES_URL=sdbayes-postgres
+      - POSTGRES_PASSWORD-production
+      - POSTGRES_USER-production
+      - POSTGRES_DB=sdbayes-production
+      - TZ=Asia/Jakarta
+    networks:
+      - sdbayes_network
+
+  sdbayes-redis:
+    restart: always
+    image: "redis:5.0"
+    deploy:
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role==manager
+    volumes:
+      - redis_data:/var/lib/redis/data/
+    networks:
+      - sdbayes_network
+
+  monitor:
+    image: bararamadhan/sdbayes-monitor:latest
+    container_name: sdbayes-monitor
+    deploy:
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role==manager
+    expose:
+      - 9181
+    command: rq-dashboard -H redis
+    depends_on:
+      - sdbayes-redis
+    networks:
+      - sdbayes_network
+
+networks:
+  sdbayes_network:
+    name: sdbayes-net
+    driver: overlay
+    attachable: true
+  traefik-public:
+    external: true
+
+volumes:
+  postgres_data:
+  redis_data:
