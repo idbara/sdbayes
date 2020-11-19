@@ -10,7 +10,7 @@ services:
       - POSTGRES_URL=sdbayes-postgres
       - POSTGRES_PASSWORD=production
       - POSTGRES_USER=production
-      - POSTGRES_DB=sdbayes-production
+      - POSTGRES_DB=production
       - MAIL_SERVER=smtp.gmail.com
       - MAIL_USERNAME=apps@bara.my.id
       - MAIL_PASSWORD=Alhamdulillah
@@ -42,7 +42,7 @@ services:
     depends_on:
       - sdbayes-postgres
       - sdbayes-redis
-      - worker
+      - sdbayes-worker
     networks:
       - sdbayes_network
       - traefik-public
@@ -69,8 +69,7 @@ services:
       - sdbayes_network
 
   sdbayes-postgres:
-    restart: always
-    image: postgres:11-alpine
+    image: postgres:11
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     deploy:
@@ -80,10 +79,9 @@ services:
         constraints:
           - node.role==manager
     environment:
-      - POSTGRES_URL=sdbayes-postgres
-      - POSTGRES_PASSWORD=production
       - POSTGRES_USER=production
-      - POSTGRES_DB=sdbayes-production
+      - POSTGRES_PASSWORD=production
+      - POSTGRES_DB=production
       - TZ=Asia/Jakarta
     networks:
       - sdbayes_network
