@@ -22,11 +22,11 @@ services:
       - MAIL_PASSWORD=Alhamdulillah
       - TZ=Asia/Jakarta
     links:
-      - db
+      - sdayes-postgres
       - redis
     command: python manage.py runserver -h 0.0.0.0
     depends_on:
-      - db
+      - sdayes-postgres
       - redis
     labels:
       - "traefik.port=5000"
@@ -55,11 +55,11 @@ services:
     command: python manage.py run_worker
     depends_on:
       - redis
-      - db
+      - sdayes-postgres
     networks:
       - sdbayes_network
 
-  db:
+  sdayes-postgres:
     restart: always
     container_name: sdbayes-postgres
     image: postgres:11-alpine
