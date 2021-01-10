@@ -75,6 +75,24 @@ services:
       - 5432:5432
     networks:
       - sdbayes_network
+  
+  adminer:
+    image: adminer
+    restart: always
+    links:
+      - sdayes-postgres
+    depends_on:
+      - sdayes-postgres
+    labels:
+      - "traefik.port=8080"
+      - "traefik.frontend.entryPoints=https"
+      - "traefik.enable=true"
+      - "traefik.weight=10"
+      - "traefik.frontend.rule=Host:adminer.docker.localhost"
+      - "traefik.backend=adminer-localhost"
+    networks:
+      - sdbayes_network
+
 
   redis:
     restart: always
