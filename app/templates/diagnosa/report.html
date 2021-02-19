@@ -1,0 +1,134 @@
+{% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+{% macro pilih(pilihan_id) %}
+{% for p in pilihans %}
+{%if pilihan_id == p.id%}
+<td>{{ p.item }}</td>
+{% endif %}
+{% endfor %}
+{% endmacro %}
+{% macro label(label_id) %}
+{% for l in labels %}
+{%if label_id == l.id%}
+<td>{{ l.item }}</td>
+{% endif %}
+{% endfor %}
+{% endmacro %}
+{% macro add_menu(title, endpoint, icon=None) %}
+<a class="ui basic button" href="{{ url_for(endpoint) }}">
+    {% if icon is not none %}
+    <i class="{{ icon }}"></i>
+    {% endif %}
+    {{ title }}
+</a>
+{% endmacro %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block content %}
+<div class="ui stackable centered grid container">
+    <div class="twelve wide column">
+
+        <h2 class="ui header">
+            Report
+            <div class="sub header"></div>
+        </h2>
+
+        {% set flashes = {
+        'error': get_flashed_messages(category_filter=['form-error']),
+        'warning': get_flashed_messages(category_filter=['form-check-email']),
+        'info': get_flashed_messages(category_filter=['form-info']),
+        'success': get_flashed_messages(category_filter=['form-success'])
+        } %}
+
+        {{ f.begin_form(form, flashes) }}
+
+        {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
+        {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
+        {{ f.form_message(flashes['info'], header='Information', class='info') }}
+        {{ f.form_message(flashes['success'], header='Success!', class='success') }}
+
+        {{ f.render_form_field(form.bulan) }}
+
+
+        {% for field in form | selectattr('type', 'equalto', 'SubmitField') %}
+        {{ f.render_form_field(field) }}
+        {% endfor %}
+
+        {{ f.end_form() }}
+
+    </div>
+</div>
+{% if diagnosa %}
+<div class="ui stackable centered grid container" id="print">
+    <div class="twelve column">
+        <button class="ui right floated button" id="btnPrint" onclick="printdoc()">
+            Print
+        </button>
+        <h2 class="ui header">
+            Diagnosa {{ bln }} {{thn}}
+        </h2>
+
+        <div class="ui two column stackable grid">
+            <!-- ui celled table responsive nowrap unstackable -->
+            <table id="example" class="ui celled table responsive" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Merasa gelisah, cemas atau amat tegang</th>
+                        <th>Tidak mampu menghentikan atau mengendalikan rasa khawatir</th>
+                        <th>Terlalu mengkhawatirkan berbagai hal</th>
+                        <th>Sulit untuk santai</th>
+                        <th>Sangat gelisah sehingga sulit untuk duduk diam</th>
+                        <th>Menjadi mudah jengkel atau lekas marah</th>
+                        <th>Merasa takut seolah-olah sesuatu yang mengerikan/buruk mungkin terjadi</th>
+                        <th>Tingkat kecemasan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in diagnosa %}
+                    <tr>
+                        <td>{{t.first_name}} {{t.last_name}}</td>
+                        {{ pilih(t.k1) }}
+                        {{ pilih(t.k2) }}
+                        {{ pilih(t.k3) }}
+                        {{ pilih(t.k4) }}
+                        {{ pilih(t.k5) }}
+                        {{ pilih(t.k6) }}
+                        {{ pilih(t.k7) }}
+                        {% if(t.tingkatkecemasan == "Sedikit atau tidak ada") %}
+                        <td bgcolor="#2185d0" style="color: white;">{{ t.tingkatkecemasan }}</td>
+                        {% elif(t.tingkatkecemasan == "Ringan") %}
+                        <td bgcolor="#2ecc40" style="color: white;">{{ t.tingkatkecemasan }}</td>
+                        {% elif(t.tingkatkecemasan == "Sedang") %}
+                        <td bgcolor="ff851b" style="color: white;">{{ t.tingkatkecemasan }}</td>
+                        {% elif(t.tingkatkecemasan == "Parah") %}
+                        <td bgcolor="#ff695e">{{ t.tingkatkecemasan }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+<script>
+    function printdoc(){
+        $("#btnPrint").hide();
+        printJS('print', 'html');
+        $("#btnPrint").show();
+    }
+
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "searching": false
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}

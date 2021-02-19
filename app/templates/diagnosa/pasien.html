@@ -25,11 +25,15 @@
 
 
 {% block content %}
-    <div class="ui stackable centered grid container">
+    <div class="ui stackable centered grid container" id="print">
         <div class="twelve column">
+            <button class="ui right floated button" id="btnPrint" onclick="printpasien()">
+                Print
+            </button>
             <h2 class="ui header">
                 Hasil Diagnosa Pasien {{ diagnosa.first_name }} {{ diagnosa.last_name }}
             </h2>
+            
             <hr>
 
             <div class="ui">
@@ -61,6 +65,10 @@
             </div>
             <br>
             <div class="ui">
+                <a href="{{ url_for('diagnosa.pasien_detail', id=diagnosa.id)}}">Detail perhitungan</a>
+            </div>
+            <br>
+            <div class="ui">
                 {% if(hasildiagnosa.tingkatkecemasan == 'Parah') %}
                 <div class="ui huge red label">
                     Berdasarkan perhitungan, maka Pasien <b>{{ diagnosa.first_name }} {{ diagnosa.last_name }}</b> mengalami tingkat gangguan kecemasan tergenerelasisikan <b>{{ hasildiagnosa.tingkatkecemasan }}</b>.
@@ -77,16 +85,48 @@
                 <div class="ui huge blue label">
                     Berdasarkan perhitungan, maka Pasien <b>{{ diagnosa.first_name }} {{ diagnosa.last_name }}</b> mengalami tingkat gangguan kecemasan tergenerelasisikan <b>{{ hasildiagnosa.tingkatkecemasan }}</b>.
                 </div>
+                
                 {% endif %}
+                
             </div>
-            <br><br>
+            <br>
+            <div class="ui two column grid">
+                <div class="row">
+                    <div class="column">
+                        <h4 class="ui header">Self care :</h4>
+                        <strong>Physical training</strong>
+                        <p>Aerobic activity for 20-30 minutes, 5 days a week can improve cardiovascular health. If injured, engaging in activities that avoid the injured muscle group or joint can help maintain physical function during the recovery period.</p>
+                        <hr>
+                        <strong>Relaxation</strong>
+                        <p>Deep breathing, meditation, yoga, rhythmic exercise, and other activities that can reduce stress.</p>
+                        <hr>
+                        <strong>Stress management</strong>
+                        <p>Engaging in fun activities or verbally expressing frustration to reduce stress and improve mental health.</p>
+                    </div>
+                    <div class="column">
+                        <h4 class="ui header">Consultation :</h4>
+                        <strong>Dwi Rahmawati, S.Psi</strong> 
+                        <p>0823 2639 2073</p>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
         </div>
     </div>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
     <script>
     $(document).ready(function() {
         $('#example').DataTable();
     } );
+
+    function printpasien(){
+        $("#btnPrint").hide();
+        printJS('print', 'html');
+        $("#btnPrint").show();
+    }
+
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
 

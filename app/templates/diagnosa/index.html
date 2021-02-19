@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-
+{% import 'macros/form_macros.html' as f %}
 {% macro pilih(pilihan_id) %}
     {% for p in pilihans %}
         {%if  pilihan_id == p.id%}
@@ -27,10 +27,13 @@
 {% block content %}
     <div class="ui stackable centered grid container">
         <div class="twelve column">
+            <a href="{{ url_for('diagnosa.report') }}" class="ui right floated button">
+                Report
+            </a>
             <h2 class="ui header">
                 Diagnosa
             </h2>
-            
+
             <div class="ui two column stackable grid">
                 <!-- ui celled table responsive nowrap unstackable -->
                 <table id="example" class="ui celled table responsive" style="width:100%">

@@ -2,8 +2,10 @@
 
 {% block content %}
     <div class="ui text container">
-      <h1>Hello {% if not (current_user.is_authenticated) %} world {% else %} {{ current_user.full_name() }} {% endif %},</h1>
+      <h1>Welcome {% if (current_user.is_authenticated) %} {{ current_user.full_name() }} {% endif %},</h1>
 
       <p>Sistem Diagnosa Gangguan Kecemasan Tergeneralisasikan dengan metode Bayes.</p>
+      <p>It is intended for people ages 18 and older.</p>
+      <p>Source: <strong>Dwi Rahmawati, S.Psi</strong></p>
     </div>
 {% endblock %}
